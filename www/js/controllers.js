@@ -246,6 +246,34 @@ angular.module('starter.controllers', ['ngTable'])
                     alert('delete successfully.');
                 });
         };
+    }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.url = "https://ichess.sinaapp.com/attend.php";
+        $scope.getCounter($scope.url,$scope);
+        $scope.addStock = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+        
+        $scope.deleteAll = function(){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+        $scope.deleteStock = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                    alert('delete successfully.');
+                });
+        };
     }).controller('ChartCtrl', function ($rootScope,$scope,$interval) {
         
         var chart = new Highcharts.stockChart({
@@ -727,6 +755,7 @@ angular.module('starter.controllers', ['ngTable'])
                         for(var i = 0; i < chart.series.length; i++){
                             chart.series[i].setData(arr[i],false);
                         }
+                        chart.navigator.series[0].setData(arr[1],false);
                         chart.redraw();
                     }
                 })
