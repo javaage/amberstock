@@ -713,14 +713,26 @@ angular.module('starter.controllers', ['ngTable'])
                                 name: 'Buy point',
                                 type: 'scatter',
                                 yAxis: 1,
-                                color: Highcharts.defaultOptions.colors[3],
+                                color: Highcharts.defaultOptions.colors[5],
                                 data: arr[3]
                             }, {
                                 name: 'Sell point',
                                 type: 'scatter',
                                 yAxis: 1,
-                                color: Highcharts.defaultOptions.colors[4],
+                                color: Highcharts.defaultOptions.colors[3],
                                 data: arr[4]
+                            }, {
+                                name: 'Pre Buy point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[4],
+                                data: arr[5]
+                            }, {
+                                name: 'Pre Sell point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[6],
+                                data: arr[6]
                             }];
 
                     var options = {
