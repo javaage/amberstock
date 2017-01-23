@@ -116,7 +116,7 @@ angular.module('starter.controllers', ['ngTable'])
                         {
                             page: 1,            // show first page
                             count: 10,           // count per page
-                            sorting: { rate: 'desc', a: 'desc' ,buy: 'desc'}
+                            sorting: { r: 'desc', rate: 'desc', a: 'desc' ,buy: 'desc'}
                         },
                         {
                             total: 0, // length of data
