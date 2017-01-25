@@ -95,6 +95,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
           }
         }
       })
+      .state('app.attend', {
+        url: '/attend',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/attend.html',
+            controller: 'AttendCtrl'
+          }
+        }
+      })
       .state('app.wave', {
         url: '/wave',
         views: {

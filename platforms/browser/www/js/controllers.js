@@ -116,7 +116,7 @@ angular.module('starter.controllers', ['ngTable'])
                         {
                             page: 1,            // show first page
                             count: 10,           // count per page
-                            sorting: { rate: 'desc', a: 'desc' ,buy: 'desc'}
+                            sorting: { r: 'desc', rate: 'desc', a: 'desc' ,buy: 'desc'}
                         },
                         {
                             total: 0, // length of data
@@ -240,6 +240,34 @@ angular.module('starter.controllers', ['ngTable'])
         };
         $scope.deleteStock = function(code){
             var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                    alert('delete successfully.');
+                });
+        };
+    }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.url = "https://ichess.sinaapp.com/attend.php";
+        $scope.getCounter($scope.url,$scope);
+        $scope.addStock = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+        
+        $scope.deleteAll = function(){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+        $scope.deleteStock = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url);
@@ -433,22 +461,9 @@ angular.module('starter.controllers', ['ngTable'])
         var r = 0;
         var chart = null;
 
-        $scope.changeLevel = function(day){
-            chart.destroy();
-            chart = null;
-            n = parseInt(day);
-            oldData[1] = [];
-            oldData[5] = [];
-            oldData[20] = [];
-            oldData[100] = [];
-
-            t = 0;
-            var maxColumn = 0;
-            calPopular(n, r);
-        }
-
-        $scope.changeAspect = function (n) {
-            chart.destroy();
+        var initChart = function(){
+            if(chart!=null)
+                chart.destroy();
             chart = null;
             
             oldData[1] = [];
@@ -458,9 +473,20 @@ angular.module('starter.controllers', ['ngTable'])
 
             t = 0;
 
-            var isPlay = false;
-            var sellNotification = false;
-            var maxColumn = 0;
+            isPlay = false;
+            sellNotification = false;
+            maxColumn = 0;
+        };
+
+        $scope.changeLevel = function(day){
+            initChart();
+            n = parseInt(day);
+            calPopular(n, r);
+        }
+
+        $scope.changeAspect = function (n) {
+            initChart();
+
             if ($scope.aspect == "main") {
                 r = 1;
                 $scope.aspect = "little";
@@ -473,6 +499,9 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.stopSound = function(){
+            initChart();
+            calPopular(n, r);
+
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
@@ -507,7 +536,6 @@ angular.module('starter.controllers', ['ngTable'])
                      arr[4] = [];
                      arr[5] = [];
                      arr[6] = [];
-                    
 
                     var gt = [];
                     var lt = [];
@@ -627,19 +655,24 @@ angular.module('starter.controllers', ['ngTable'])
                         isPlay = false;
                     }
 
+                    // maxValue += 5;
+                    // minValue -= 5;
+
                     var yAxis = [{
                         labels: {
                             format: '{value}'
                         },
-                        max: 2 * maxColumn,
-                        tickInterval: 1000,
+                        tickAmount: 1,
+                        max: 2*maxColumn,
+                        //tickInterval: 300,
                         opposite: false
                     }, {
                         labels: {
                             format: '{value}'
                         },
                         startOnTick: false,
-                        endOnTick: false,
+                        endOnTick: true,
+                        tickAmount: 8,
                         max: maxValue,
                         min: minValue,
                         opposite: true,
@@ -685,14 +718,26 @@ angular.module('starter.controllers', ['ngTable'])
                                 name: 'Buy point',
                                 type: 'scatter',
                                 yAxis: 1,
-                                color: Highcharts.defaultOptions.colors[3],
+                                color: Highcharts.defaultOptions.colors[5],
                                 data: arr[3]
                             }, {
                                 name: 'Sell point',
                                 type: 'scatter',
                                 yAxis: 1,
-                                color: Highcharts.defaultOptions.colors[4],
+                                color: Highcharts.defaultOptions.colors[3],
                                 data: arr[4]
+                            }, {
+                                name: 'Pre Buy point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[4],
+                                data: arr[5]
+                            }, {
+                                name: 'Pre Sell point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[6],
+                                data: arr[6]
                             }];
 
                     var options = {
@@ -700,7 +745,8 @@ angular.module('starter.controllers', ['ngTable'])
                                 renderTo: 'popular'
                             },
                             rangeSelector: {
-                                selected: 1
+                                selected: 1,
+                                enabled: false
                             },
                             title: {
                                 text: null
@@ -724,9 +770,17 @@ angular.module('starter.controllers', ['ngTable'])
                     if(chart==null){
                         chart = new Highcharts.stockChart(options);
                     }else{
+                        chart.yAxis[0].min = 0;
+                        chart.yAxis[0].max = maxColumn;
+                        chart.yAxis[0].isDirty = true;
+                        chart.yAxis[1].min = minValue;
+                        chart.yAxis[1].max = maxValue;
+                        chart.yAxis[1].isDirty = true;
+
                         for(var i = 0; i < chart.series.length; i++){
                             chart.series[i].setData(arr[i],false);
                         }
+                        chart.navigator.series[0].setData(arr[1],false);
                         chart.redraw();
                     }
                 })
@@ -737,6 +791,7 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
+        initChart();
         calPopular(n, r);
         $rootScope.loop = $interval(function (){ calPopular(n, r) }, 10000);
     });
