@@ -655,19 +655,22 @@ angular.module('starter.controllers', ['ngTable'])
                         isPlay = false;
                     }
 
+                    maxValue += 5;
+                    minValue -= 5;
+
                     var yAxis = [{
                         labels: {
                             format: '{value}'
                         },
-                        max: 2 * maxColumn,
-                        tickInterval: 1000,
+                        max: maxColumn,
+                        tickInterval: 300,
                         opposite: false
                     }, {
                         labels: {
                             format: '{value}'
                         },
                         startOnTick: false,
-                        endOnTick: false,
+                        endOnTick: true,
                         max: maxValue,
                         min: minValue,
                         opposite: true,
@@ -740,7 +743,8 @@ angular.module('starter.controllers', ['ngTable'])
                                 renderTo: 'popular'
                             },
                             rangeSelector: {
-                                selected: 1
+                                selected: 1,
+                                enabled: false
                             },
                             title: {
                                 text: null
@@ -764,6 +768,13 @@ angular.module('starter.controllers', ['ngTable'])
                     if(chart==null){
                         chart = new Highcharts.stockChart(options);
                     }else{
+                        chart.yAxis[0].min = 0;
+                        chart.yAxis[0].max = maxColumn;
+                        chart.yAxis[0].isDirty = true;
+                        chart.yAxis[1].min = minValue;
+                        chart.yAxis[1].max = maxValue;
+                        chart.yAxis[1].isDirty = true;
+
                         for(var i = 0; i < chart.series.length; i++){
                             chart.series[i].setData(arr[i],false);
                         }
