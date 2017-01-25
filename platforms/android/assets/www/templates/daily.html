@@ -1,0 +1,21 @@
+<ion-view view-title="Short">
+    <ion-content>
+    <ion-refresher pulling-text="refresh" on-refresh="getCounter(url)"></ion-refresher>
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+            <tr ng-repeat="stock in $data">
+                <td title="'代码'" sortable="'code'">
+                    {{stock.code}}</td>
+                <td title="'a'" sortable="'a'">
+                    {{stock.a | number:3}}</td>
+                <td title="'b'" sortable="'b'">
+                    {{stock.b | number:3}}</td>
+                <td title="'r'" sortable="'r'">
+                    {{stock.r | number:3}}</td>
+               
+                <td title="'操作'">
+                    <button type="button" class="btn btn-primary" ng-click="openModal('{{stock.code}}')">Detail</button>
+                </td>
+            </tr>
+        </table>
+    </ion-content>
+</ion-view>
