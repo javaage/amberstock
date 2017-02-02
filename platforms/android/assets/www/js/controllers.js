@@ -5,7 +5,7 @@ angular.module('starter.controllers', ['ngTable'])
         var dailyUrlTmp = "https://image.sinajs.cn/newchart/daily/n/sh600000.gif";
         var miniteUrlTmp = "https://image.sinajs.cn/newchart/min/n/sh600000.gif";
         var maxImgWidth = document.body.clientWidth * 0.9;
-
+        $scope.ting = {};
         var addGif = function () {
             $("table.table tr").each(function () {
                 var td = $("<td></td>");
@@ -18,16 +18,19 @@ angular.module('starter.controllers', ['ngTable'])
                 img.src = url;
             });
         };
-        // With the new view caching in Ionic, Controllers are only called
-        // when they are recreated or on app start, instead of every page change.
-        // To listen for when this page is active (for example, to refresh data),
-        // listen for the $ionicView.enter event:
-        //$scope.$on('$ionicView.enter', function(e) {
-        //});
+
+        var getTing = function(){
+            $http.get('http://ichess.sinaapp.com/daily/ting20.php')
+            .success(function(data){
+                $scope.ting=data;
+            });
+        };
 
         // Form data for the login modal
         $scope.loginData = {};
         $scope.player = null;
+
+        getTing();
 
         // Create the login modal that we will use later
         $ionicModal.fromTemplateUrl('templates/detail-modal.html', {

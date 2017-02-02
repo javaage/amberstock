@@ -4,7 +4,7 @@
         <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
             <tr ng-repeat="stock in $data">
                 <td title="'代码'" sortable="'code'">
-                    {{stock.code}}</td>
+                    {{stock.code}}<span class="badge label-danger">{{ting[stock.code.toLowerCase()]}}</span></td>
                 <td title="'名称'" sortable="'name'">
                     {{stock.name}}</td>
                 <td title="'信号'" sortable="'signal'">
