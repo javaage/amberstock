@@ -19,7 +19,7 @@ angular.module('starter.controllers', ['ngTable'])
             });
         };
 
-        var getTing = function(){
+        $scope.getTing = function(){
             $http.get('http://ichess.sinaapp.com/daily/ting20.php')
             .success(function(data){
                 $scope.ting=data;
@@ -30,7 +30,7 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.loginData = {};
         $scope.player = null;
 
-        getTing();
+        $scope.getTing();
 
         // Create the login modal that we will use later
         $ionicModal.fromTemplateUrl('templates/detail-modal.html', {
@@ -220,8 +220,33 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.getCounter($scope.url,$scope);
     })
     .controller('ShortCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.url = "https://ichess.sinaapp.com/short.php";
-        $scope.getCounter($scope.url,$scope);
+        var n = 0;
+
+        $scope.loadShort = function(n){
+            $scope.url = "https://ichess.sinaapp.com/actionDetail.php?n=" + n;
+            $scope.getCounter($scope.url,$scope);
+        };
+
+        $scope.previous = function(){
+            n--;
+            $scope.loadShort(n);
+        };
+
+        $scope.next = function(){
+            n = (++n)>0? 0:n;
+            $scope.loadShort(n);
+        };
+
+        $scope.getTing = function(){
+            $http.get('http://ichess.sinaapp.com/daily/ting20.php')
+            .success(function(data){
+                $scope.ting=data;
+            });
+        };
+
+        $scope.getTing();
+        
+        $scope.loadShort(n);
     }).controller('TrendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/rate.php";
         $scope.getCounter($scope.url,$scope);
