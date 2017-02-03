@@ -1,7 +1,0 @@
----
-applications:
-  - name: amber
-    buildpack: staticfile_buildpack
-    path: .
-    memory: 128M
-    stack: cflinuxfs2
