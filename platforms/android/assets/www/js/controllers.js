@@ -70,11 +70,8 @@ angular.module('starter.controllers', ['ngTable'])
             $("#low").text("");
             $("#divMinite").empty();
             $("#divDaily").empty();
-            var post = {
-                "code": code
-            };
 
-            $http.post('https://ichess.sinaapp.com/prefprice.php',post)
+            $http.post('https://ichess.sinaapp.com/prefprice.php?code=' + code)
                 .success(function (data) {
                     console.log(data);
                     $("#prefBuy").text(data.prefBuy);
@@ -82,6 +79,7 @@ angular.module('starter.controllers', ['ngTable'])
                     $("#current").text(data.current);
                     $("#high").text(data.high);
                     $("#low").text(data.low);
+                    $("#price").text(data.price4 + ' ' + data.price3)
                     dailyUrl = dailyUrlTmp.replace("sh600000", code) + "?t=" + Math.random();
                     miniteUrl = miniteUrlTmp.replace("sh600000", code) + "?t=" + Math.random();
 
