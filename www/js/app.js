@@ -104,12 +104,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('app.wave', {
-        url: '/wave',
+      .state('app.waveHolder', {
+        url: '/waveHolder',
         views: {
           'menuContent': {
-            templateUrl: 'templates/chart.html',
-            controller: 'WaveCtrl'
+            templateUrl: 'templates/chartHolder.html',
+            controller: 'WaveHolderCtrl'
+          }
+        }
+      })
+      .state('app.waveAttend', {
+        url: '/waveAttend',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/chartAttend.html',
+            controller: 'WaveAttendCtrl'
           }
         }
       })
@@ -119,15 +128,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           'menuContent': {
             templateUrl: 'templates/popular.html',
             controller: 'PopularCtrl'
-          }
-        }
-      })
-      .state('app.chart', {
-        url: '/chart',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/chart.html',
-            controller: 'ChartCtrl'
           }
         }
       })

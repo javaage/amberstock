@@ -60,6 +60,15 @@ angular.module('starter.controllers', ['ngTable'])
             }, 1000);
         };
 
+        $scope.addAttend = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+
         $scope.openModal = function (code) {
             code = code.toLowerCase();
             $scope.modal.show();
@@ -71,7 +80,13 @@ angular.module('starter.controllers', ['ngTable'])
             $("#divMinite").empty();
             $("#divDaily").empty();
 
-            $http.post('https://ichess.sinaapp.com/prefprice.php?code=' + code)
+            if(code=='sz399001'){
+                var url = 'https://ichess.sinaapp.com/prefindex.php?code=' + code;
+            }else{
+                var url = 'https://ichess.sinaapp.com/prefprice.php?code=' + code
+            }
+
+            $http.post(url)
                 .success(function (data) {
                     console.log(data);
                     $("#prefBuy").text(data.prefBuy);
@@ -115,14 +130,34 @@ angular.module('starter.controllers', ['ngTable'])
                     console.log(data);
 
                     if(url.indexOf('actionList')>=0){
-                        for(var index in data){
+                        var frequency = [];
+
+                        // for(var index in data){
+                        //     var item = data[index];
+                        //     var names = item.pref.split(',');
+                        //     var codes = item.pref1.split(',');
+
+                        //     for(var i in names){
+                        //         frequency[codes[i]] = frequency[codes[i]]? ++frequency[codes[i]] : 1;
+                        //     }
+                        // }
+
+                        for(var index = data.length-1; index>=0; index--){
                             var item = data[index];
                             var names = item.pref.split(',');
                             var codes = item.pref1.split(',');
                             var arr = [];
+
                             for(var i in names){
-                                arr[i] = [names[i],codes[i]];
+                                frequency[codes[i]] = frequency[codes[i]]? ++frequency[codes[i]] : 1;
                             }
+
+                            for(var i in names){
+                                arr[i] = [names[i],codes[i],frequency[codes[i]]];
+                            }
+                            arr = arr.sort(function(a,b){
+                                return b[2]-a[2];
+                            });
                             item.pref = arr;
                         }
                     }
@@ -227,6 +262,12 @@ angular.module('starter.controllers', ['ngTable'])
 
     })
     .controller('ActionCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.action=[];
+        $scope.action[0] = 'Pre Sell';
+        $scope.action[1] = 'Sell';
+        $scope.action[2] = 'Pre Buy';
+        $scope.action[3] = 'Buy';
+
         $scope.url = "https://ichess.sinaapp.com/actionList.php";
         $scope.getCounter($scope.url,$scope);
     })
@@ -290,14 +331,6 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/attend.php";
         $scope.getCounter($scope.url,$scope);
-        $scope.addStock = function(code){
-
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url);
-                });
-        };
         
         $scope.deleteAll = function(){
 
@@ -367,17 +400,7 @@ angular.module('starter.controllers', ['ngTable'])
         // });
         
 
-    }).controller('WaveCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
-        //  $cordovaLocalNotification.add({
-        //     id: "1234",
-        //     message: "This is a message",
-        //     title: "This is a title",
-        //     autoCancel: true,
-        //     sound: null
-        // }).then(function () {
-        //     console.log("The notification has been set");
-        // });
-
+    }).controller('WaveHolderCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
         var codes = 'sz002594,sh601390';
         var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
         
@@ -395,7 +418,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         var charts = [];
 
-        var createChart = function (container, seriesOptions) {
+        $scope.createChart = function (container, seriesOptions, name) {
             for (var v in seriesOptions) {
                 if (seriesOptions[v].name == 'sh000001') {
                     seriesOptions[v].yAxis = 0;
@@ -417,7 +440,7 @@ angular.module('starter.controllers', ['ngTable'])
                         selected: 1
                     },
                     title: {
-                        text: null
+                        text: container + ' ' + name
                     },
                     navigator: {
                         enabled: false
@@ -435,7 +458,7 @@ angular.module('starter.controllers', ['ngTable'])
             
         };
 
-        var getindex = function (code) {
+        $scope.getindex = function (code,name) {
             $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
                 .success(function (data) {
                     console.log(data);
@@ -444,10 +467,9 @@ angular.module('starter.controllers', ['ngTable'])
                     if (lst && lst.length > 0) {
                         lt = lst[lst.length - 1][0];
                     }
-                    createChart(code, data);
+                    $scope.createChart(code, data, name);
             });
         };
-
         var getHolder = function () {
             var url = 'https://ichess.sinaapp.com/holder.php';
             $http.get(url)
@@ -455,8 +477,8 @@ angular.module('starter.controllers', ['ngTable'])
                     for (var i in data) {
                         var item = data[i];
                         var code = item.code.toLowerCase();
-                        $('#popular').append('<div id="' + code + '"></div>');
-                        getindex(code);
+                        $('#holder').append('<div id="' + code + '"></div>');
+                        $scope.getindex(code,item.name);
                     }
                 })
                 .finally(function() {
@@ -467,6 +489,96 @@ angular.module('starter.controllers', ['ngTable'])
         getHolder();
 
         $rootScope.loop = $interval(function (){ getHolder() }, 10000);
+        
+    }).controller('WaveAttendCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
+        var codes = 'sz002594,sh601390';
+        var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
+        
+        var yAxis = [{
+            labels: {
+                format: '{value}'
+            },
+            opposite: false
+        }, {
+            labels: {
+                format: '{value}'
+            },
+            opposite: true
+        }];
+
+        var charts = [];
+
+        $scope.createChart = function (container, seriesOptions, name) {
+            for (var v in seriesOptions) {
+                if (seriesOptions[v].name == 'sh000001') {
+                    seriesOptions[v].yAxis = 0;
+                } else {
+                    seriesOptions[v].yAxis = 1;
+                }
+            }
+
+            if(charts[container]){
+                for(var i = 0; i < charts[container].series.length; i++){
+                    charts[container].series[i].setData(seriesOptions[i].data);
+                }
+            }else{
+                charts[container] = new Highcharts.stockChart({
+                    chart: {
+                        renderTo: container
+                    },
+                    rangeSelector: {
+                        selected: 1
+                    },
+                    title: {
+                        text: container + ' ' + name
+                    },
+                    navigator: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    scrollbar: {
+                        enabled: true
+                    },
+                    yAxis: yAxis,
+                    series: seriesOptions
+                });
+            }
+            
+        };
+
+        $scope.getindex = function (code,name) {
+            $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
+                .success(function (data) {
+                    console.log(data);
+
+                    var lst = data[0]['data'];
+                    if (lst && lst.length > 0) {
+                        lt = lst[lst.length - 1][0];
+                    }
+                    $scope.createChart(code, data, name);
+            });
+        };
+        var getAttend = function () {
+            var url = 'https://ichess.sinaapp.com/attend.php';
+            $http.get(url)
+                .success(function (data) {
+                    for (var i in data) {
+                        var item = data[i];
+                        var code = item.code.toLowerCase();
+                        $('#attend').append('<div id="' + code + '"></div>');
+                        $scope.getindex(code,item.name);
+                    }
+                })
+                .finally(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+        };
+
+        getAttend();
+
+        $rootScope.loop = $interval(function (){ getAttend() }, 10000);
         
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, NgTableParams) {
 
