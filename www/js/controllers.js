@@ -113,6 +113,21 @@ angular.module('starter.controllers', ['ngTable'])
             $http.get(url)
                 .success(function (data) {
                     console.log(data);
+
+                    if(url.indexOf('actionList')>=0){
+                        for(var index in data){
+                            var item = data[index];
+                            var names = item.pref.split(',');
+                            var codes = item.pref1.split(',');
+                            var arr = [];
+                            for(var i in names){
+                                arr[i] = [names[i],codes[i]];
+                            }
+                            item.pref = arr;
+                        }
+                    }
+                    
+
                     $scope.tableParams = new NgTableParams(
                         {
                             page: 1,            // show first page
@@ -245,7 +260,7 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.getTing();
-        
+
         $scope.loadShort(n);
     }).controller('TrendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/rate.php";

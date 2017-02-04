@@ -1,25 +1,27 @@
 <ion-modal-view>
     <ion-content>
-
         <div>
-            <table class="table">
-                <tr>
-                    <td>推荐买入价格</td>
-                    <td id="prefBuy"></td>
-                    <td>推荐卖出价格</td>
-                    <td id="prefSell"></td>
-                    <td>当前价格</td>
-                    <td id="current"></td>
-                </tr>
-                <tr>
-                    <td>当日最高价格</td>
-                    <td id="high"></td>
-                    <td>当日最低价格</td>
-                    <td id="low"></td>
-                    <td>5日平均</td>
-                    <td id="price"></td>
-                </tr>
-            </table>
+            <div  ng-click="closeModal()">
+                <table class="table">
+                    <tr>
+                        <td>推荐买入价格</td>
+                        <td id="prefBuy"></td>
+                        <td>推荐卖出价格</td>
+                        <td id="prefSell"></td>
+                        <td>当前价格</td>
+                        <td id="current"></td>
+                    </tr>
+                    <tr>
+                        <td>当日最高价格</td>
+                        <td id="high"></td>
+                        <td>当日最低价格</td>
+                        <td id="low"></td>
+                        <td>5日平均</td>
+                        <td id="price"></td>
+                    </tr>
+                </table>
+            </div>
+            
             <div>
                 <!-- Nav tabs -->
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">

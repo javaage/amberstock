@@ -12,7 +12,9 @@
                 <td title="'detail'" sortable="'detail'">
                     {{stock.detail}}</td>
                 <td title="'pref'" sortable="'pref'">
-                    {{stock.pref}}</td>
+                    <a ng-repeat="item in stock.pref" ng-click="openModal('{{item[1].substr(0,8)}}')">
+                        <span >{{item[0]}}</span></td>
+                    </a>
             </tr>
         </table>
     </ion-content>
