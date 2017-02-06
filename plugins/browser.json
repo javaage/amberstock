@@ -13,6 +13,9 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
+        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
@@ -26,9 +29,6 @@
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
-        },
-        "cordova-plugin-fullscreen": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         }
     },

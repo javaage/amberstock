@@ -728,7 +728,7 @@ angular.module('starter.controllers', ['ngTable'])
                         var cl = Math.round(parseFloat(data[i].clmn)/1000);
 
                         if(cl > 4000){
-                            cl = 4000;
+                            cl = maxColumn * 1.1;
                         }
                         arr[0].push([1000 * parseInt(data[i].t), cl]);
 
