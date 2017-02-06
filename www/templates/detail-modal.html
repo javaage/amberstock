@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-content>
         <div>
-            <div  ng-click="closeModal()">
+            <div>
                 <table class="table">
                     <tr>
                         <td>推荐买入价格</td>
@@ -21,7 +21,11 @@
                     </tr>
                 </table>
             </div>
-            
+            <div>
+                <button ng-click="addAttend(code)" style="width:30%">Add</button>
+                <button ng-click="deleteAttend(code)" style="width:30%">Delete</button>
+                <button ng-click="closeModal()" style="width:30%">Close</button>
+            </div>
             <div>
                 <!-- Nav tabs -->
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">

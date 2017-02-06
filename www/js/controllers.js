@@ -69,7 +69,16 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
+        $scope.deleteAttend = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+
         $scope.openModal = function (code) {
+            $scope.code = code.toLowerCase();
             code = code.toLowerCase();
             $scope.modal.show();
             $("#prefBuy").text("");
@@ -310,9 +319,28 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.url = "https://ichess.sinaapp.com/pref.php";
         $scope.getCounter($scope.url,$scope);
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.search = {};
         $scope.url = "https://ichess.sinaapp.com/holder.php";
         $scope.getCounter($scope.url,$scope);
-        $scope.addStock = function(code){
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addHolder = function(code){
 
             var urlAdd = "https://ichess.sinaapp.com/holder.php?a=a&c=" + code;
             $http.get(urlAdd)
@@ -320,18 +348,46 @@ angular.module('starter.controllers', ['ngTable'])
                     $scope.getCounter($scope.url);
                 });
         };
-        $scope.deleteStock = function(code){
+        $scope.deleteHolder = function(code){
             var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url);
                     alert('delete successfully.');
-                });
+            });
         };
     }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.search = {};
+
         $scope.url = "https://ichess.sinaapp.com/attend.php";
         $scope.getCounter($scope.url,$scope);
         
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addAttend = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+
         $scope.deleteAll = function(){
 
             var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
@@ -340,7 +396,7 @@ angular.module('starter.controllers', ['ngTable'])
                     $scope.getCounter($scope.url);
                 });
         };
-        $scope.deleteStock = function(code){
+        $scope.deleteAttend = function(code){
             var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
@@ -442,6 +498,25 @@ angular.module('starter.controllers', ['ngTable'])
                     title: {
                         text: container + ' ' + name
                     },
+                    legend:{
+                        enabled: true,
+                        align: 'left',
+                        verticalAlign: 'middle',
+                        layout: 'vertical'
+                    },
+                    plotOptions: {
+                        series: {
+                            events: {
+                                legendItemClick: function(event) {
+                                    var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + event.target.name;
+                                    $http.get(urlDetete)
+                                        .success(function (data) {
+                                            $('div#' + event.target.name).remove();
+                                        });
+                                }
+                            }
+                        }
+                    },
                     navigator: {
                         enabled: false
                     },
@@ -531,6 +606,25 @@ angular.module('starter.controllers', ['ngTable'])
                     },
                     title: {
                         text: container + ' ' + name
+                    },
+                    legend:{
+                        enabled: true,
+                        align: 'left',
+                        verticalAlign: 'middle',
+                        layout: 'vertical'
+                    },
+                    plotOptions: {
+                        series: {
+                            events: {
+                                legendItemClick: function(event) {
+                                    var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + event.target.name;
+                                    $http.get(urlDetete)
+                                        .success(function (data) {
+                                            $('div#' + event.target.name).remove();
+                                        });
+                                }
+                            }
+                        }
                     },
                     navigator: {
                         enabled: false

@@ -2,8 +2,14 @@
     <ion-content>
         <ion-refresher pulling-text="refresh" on-refresh="getCounter(url)"></ion-refresher>
         <div>
-        <input type="text" name="code" ng-model="code" placeholder="please input your code here" style="width:100%;border: 1px;">
-        <button ng-click="addAttend(code)">Add attention code</button>
+        
+        <input type="text" name="sc" ng-model="search.sc" ng-change="searchStock(search.sc)" placeholder="please input your code here" style="width:80%;border: 1px;">
+        <ion-list>
+          <ion-item ng-repeat="item in searchStocks" ng-click="selectCode(item.code)">
+             {{item.code}} {{item.name}} {{sc}}
+          </ion-item>
+        </ion-list>
+        <button ng-click="addAttend(search.sc)">Add attention code</button>
         <button ng-click="deleteAll()">Delete all</button>
         </div>
         <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
@@ -21,7 +27,7 @@
                 <td title="'gate'" sortable="'gate'">
                     {{stock.gate | number:3}}</td>
                 <td title="'操作'">
-                    <button type="button" class="btn btn-primary" ng-click="deleteStock('{{stock.code}}')">Delete</button>
+                    <button type="button" class="btn btn-primary" ng-click="deleteAttend('{{stock.code}}')">Delete</button>
                 </td>
             </tr>
         </table>
