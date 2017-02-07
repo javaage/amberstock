@@ -285,10 +285,15 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.getCounter($scope.url,$scope);
     })
     .controller('ShortCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        var n = 0;
+        $scope.times = [{'id':99999999,'time':'current'}];
+        $scope.loadShort = function(){
+            $scope.url = "https://ichess.sinaapp.com/actionDetail.php";
+            $scope.getCounter($scope.url,$scope);
+        };
 
-        $scope.loadShort = function(n){
-            $scope.url = "https://ichess.sinaapp.com/actionDetail.php?n=" + n;
+        $scope.changeTime = function(id){
+            id = id? id:'';
+            $scope.url = "https://ichess.sinaapp.com/actionDetail.php?n=" + id;
             $scope.getCounter($scope.url,$scope);
         };
 
@@ -309,9 +314,37 @@ angular.module('starter.controllers', ['ngTable'])
             });
         };
 
+        $scope.getCounter = function (url) {
+
+            $http.get(url)
+                .success(function (data) {
+
+                    $scope.tableParams = new NgTableParams(
+                        {
+                            page: 1,            // show first page
+                            count: 10,           // count per page
+                            sorting: { r: 'desc', rate: 'desc', a: 'desc' ,buy: 'desc'}
+                        },
+                        {
+                            total: 0, // length of data
+                            dataset: data
+                        });
+                })
+                .finally(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+        };
+
         $scope.getTing();
 
-        $scope.loadShort(n);
+        $scope.loadShort();
+
+        var urlTime = "https://ichess.sinaapp.com/actionDetail.php?t=1";
+        $http.get(urlTime)
+            .success(function(data){
+                $scope.times=data;
+            });
+
     }).controller('TrendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/rate.php";
         $scope.getCounter($scope.url,$scope);
