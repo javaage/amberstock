@@ -534,9 +534,6 @@ angular.module('starter.controllers', ['ngTable'])
                     rangeSelector: {
                         selected: 1
                     },
-                    title: {
-                        text: container + ' ' + name
-                    },
                     legend:{
                         enabled: true,
                         align: 'left',
@@ -647,9 +644,6 @@ angular.module('starter.controllers', ['ngTable'])
                     },
                     rangeSelector: {
                         selected: 1
-                    },
-                    title: {
-                        text: container + ' ' + name
                     },
                     legend:{
                         enabled: true,
