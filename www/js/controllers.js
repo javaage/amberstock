@@ -310,48 +310,29 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.getCounter($scope.url,$scope);
     }).controller('TrendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.q = {};
-        $scope.url = "https://ichess.sinaapp.com/rate.php";
-        $scope.getCounter($scope.url,$scope);
 
         $scope.changeTime = function(t){
-            var time = t? t.time:'';
-            $scope.url = "https://ichess.sinaapp.com/rate.php?time=" + time;
+            $scope.url = "https://ichess.sinaapp.com/rate.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
 
-        var urlTime = "https://ichess.sinaapp.com/actionDetail.php?t=1";
+        var urlTime = "https://ichess.sinaapp.com/gethistory.php";
         $http.get(urlTime)
             .success(function(data){
                 if(data.length>0){
                     $scope.times=data;
                     $scope.q.t = $scope.times[0];
-                    $scope.loadShort();
+                    $scope.url = "https://ichess.sinaapp.com/rate.php";
+                    $scope.getCounter($scope.url,$scope);
                 }else{
                     $scope.times = [];
                 }
         });
     }).controller('PrefCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.q = {};
+
         $scope.url = "https://ichess.sinaapp.com/pref.php";
         $scope.getCounter($scope.url,$scope);
 
-        $scope.changeTime = function(t){
-            var time = t? t.time:'';
-            $scope.url = "https://ichess.sinaapp.com/pref.php?time=" + time;
-            $scope.getCounter($scope.url,$scope);
-        };
-
-        var urlTime = "https://ichess.sinaapp.com/actionDetail.php?t=1";
-        $http.get(urlTime)
-            .success(function(data){
-                if(data.length>0){
-                    $scope.times=data;
-                    $scope.q.t = $scope.times[0];
-                    $scope.loadShort();
-                }else{
-                    $scope.times = [];
-                }
-        });
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
         $scope.url = "https://ichess.sinaapp.com/holder.php";
@@ -622,9 +603,6 @@ angular.module('starter.controllers', ['ngTable'])
                     seriesOptions[v].yAxis = 0;
                 } else {
                     seriesOptions[v].yAxis = 1;
-                    yAxis[1].min = seriesOptions[v].data[0][1] * 0.97;
-                    yAxis[1].max = seriesOptions[v].data[0][1] * 1.03;
-                    
                 }
             }
 
