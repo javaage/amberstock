@@ -593,8 +593,6 @@ angular.module('starter.controllers', ['ngTable'])
                 labels: {
                     format: '{value}'
                 },
-                min:0,
-                max:1000,
                 opposite: true
             }];
 
