@@ -1,4 +1,8 @@
 <ion-view view-title="Wave Up">
+    <ion-nav-buttons side="right">
+        <select ng-model="q.t" ng-init="q.t=times[0]" ng-options="item as item.time for item in times" ng-change="changeTime(q.t)">
+        </select>
+    </ion-nav-buttons>
     <ion-content>
     <ion-refresher pulling-text="refresh" on-refresh="getCounter(url)"></ion-refresher>
         <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
