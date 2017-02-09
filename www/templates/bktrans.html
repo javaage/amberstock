@@ -1,0 +1,24 @@
+<ion-view view-title="Above Average">
+    <ion-nav-buttons side="right">
+        <select ng-model="q.t" ng-init="q.t=times[0]" ng-options="item as item.time for item in times" ng-change="changeTime(q.t)">
+        </select>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <ion-refresher pulling-text="refresh" on-refresh="loadShort()"></ion-refresher>
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+            <tr ng-repeat="stock in $data">
+                <td title="'代码'" sortable="'code'" ng-click="openModal('{{stock.code}}')">
+                    {{stock.code}}<span class="badge label-danger">{{ting[stock.code.toLowerCase()]}}</span></td>
+                <td title="'名称'" sortable="'name'">
+                    {{stock.name}}</td>
+                <td title="'increase'" sortable="'increase'">
+                    {{stock.increase | number:3}}</td>
+                <td title="'trans'" sortable="'trans'">
+                    {{stock.trans | number:3}}</td>
+                <td title="'time'" sortable="'time'">
+                    {{stock.time}}</td>
+            </tr>
+        </table>
+    </ion-content>
+</ion-view>

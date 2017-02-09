@@ -122,12 +122,35 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('app.popular', {
-        url: '/popular',
+      .state('tab', {
+        url: '/tab',
+        abstract: true,
+        templateUrl: 'templates/transTab.html'
+      })
+      .state('tab.trans', {
+        url: '/trans',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/popular.html',
-            controller: 'PopularCtrl'
+          'trans': {
+            templateUrl: 'templates/trans.html',
+            controller: 'TransCtrl'
+          }
+        }
+      })
+      .state('tab.bktrans', {
+        url: '/bktrans',
+        views: {
+          'bktrans': {
+            templateUrl: 'templates/bktrans.html',
+            controller: 'BktransCtrl'
+          }
+        }
+      })
+      .state('tab.ctrans', {
+        url: '/ctrans',
+        views: {
+          'ctrans': {
+            templateUrl: 'templates/ctrans.html',
+            controller: 'CtransCtrl'
           }
         }
       })

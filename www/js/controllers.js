@@ -333,6 +333,21 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.url = "https://ichess.sinaapp.com/pref.php";
         $scope.getCounter($scope.url,$scope);
 
+    }).controller('TransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+
+        $scope.url = "https://ichess.sinaapp.com/trans.php";
+        $scope.getCounter($scope.url,$scope);
+
+    }).controller('BktransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+
+        $scope.url = "https://ichess.sinaapp.com/bktrans.php";
+        $scope.getCounter($scope.url,$scope);
+
+    }).controller('CtransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+
+        $scope.url = "https://ichess.sinaapp.com/ctrans.php";
+        $scope.getCounter($scope.url,$scope);
+
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
         $scope.url = "https://ichess.sinaapp.com/holder.php";
