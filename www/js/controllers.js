@@ -333,21 +333,38 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.url = "https://ichess.sinaapp.com/pref.php";
         $scope.getCounter($scope.url,$scope);
 
+    }).controller('TabCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.q = {};
+        var urlTime = "https://ichess.sinaapp.com/gethistory.php";
+        $http.get(urlTime)
+            .success(function(data){
+                if(data.length>0){
+                    $scope.times=data;
+                    $scope.q.t = $scope.times[0];
+                }else{
+                    $scope.times = [];
+                }
+        });
+
     }).controller('TransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-
-        $scope.url = "https://ichess.sinaapp.com/trans.php";
-        $scope.getCounter($scope.url,$scope);
-
+        
+        $scope.changeTime = function(t){
+            $scope.url = "https://ichess.sinaapp.com/trans.php?t=" + t;
+            $scope.getCounter($scope.url,$scope);
+        };
+        $scope.changeTime('');
     }).controller('BktransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-
-        $scope.url = "https://ichess.sinaapp.com/bktrans.php";
-        $scope.getCounter($scope.url,$scope);
-
+        $scope.changeTime = function(t){
+            $scope.url = "https://ichess.sinaapp.com/bktrans.php?t=" + t;
+            $scope.getCounter($scope.url,$scope);
+        };
+        $scope.changeTime('');
     }).controller('CtransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-
-        $scope.url = "https://ichess.sinaapp.com/ctrans.php";
-        $scope.getCounter($scope.url,$scope);
-
+        $scope.changeTime = function(t){
+            $scope.url = "https://ichess.sinaapp.com/ctrans.php?t=" + t;
+            $scope.getCounter($scope.url,$scope);
+        };
+        $scope.changeTime('');
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
         $scope.url = "https://ichess.sinaapp.com/holder.php";

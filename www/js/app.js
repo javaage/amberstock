@@ -122,12 +122,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('tab', {
+      .state('app.tab', {
         url: '/tab',
-        abstract: true,
-        templateUrl: 'templates/transTab.html'
+        //abstract: true,
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/transTab.html',
+            controller: 'TabCtrl'
+          }
+        }
       })
-      .state('tab.trans', {
+      .state('app.tab.trans', {
         url: '/trans',
         views: {
           'trans': {
@@ -136,7 +141,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('tab.bktrans', {
+      .state('app.tab.bktrans', {
         url: '/bktrans',
         views: {
           'bktrans': {
@@ -145,7 +150,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('tab.ctrans', {
+      .state('app.tab.ctrans', {
         url: '/ctrans',
         views: {
           'ctrans': {
