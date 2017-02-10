@@ -6,7 +6,12 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanitize'])
 
-  .run(function ($ionicPlatform) {
+  .run(function ($ionicPlatform, $rootScope, $templateCache) {
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
+        if (typeof(current) !== 'undefined'){  
+            $templateCache.remove(current.templateUrl);  
+        }  
+    }); 
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -122,6 +127,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
+      .state('app.popular', {
+        url: '/popular',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/popular.html',
+            controller: 'PopularCtrl'
+          }
+        }
+      })
       .state('app.tab', {
         url: '/tab',
         //abstract: true,
@@ -156,6 +170,52 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           'ctrans': {
             templateUrl: 'templates/ctrans.html',
             controller: 'CtransCtrl'
+          }
+        }
+      })
+      .state('app.my', {
+        url: '/my',
+        //abstract: true,
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/myTab.html',
+            controller: 'MyCtrl'
+          }
+        }
+      })
+      .state('app.my.holder', {
+        url: '/holder',
+        views: {
+          'holder': {
+            templateUrl: 'templates/holder.html',
+            controller: 'HolderCtrl'
+          }
+        }
+      })
+      .state('app.my.attend', {
+        url: '/attend',
+        views: {
+          'attend': {
+            templateUrl: 'templates/attend.html',
+            controller: 'AttendCtrl'
+          }
+        }
+      })
+      .state('app.my.waveHolder', {
+        url: '/waveHolder',
+        views: {
+          'waveHolder': {
+            templateUrl: 'templates/chartHolder.html',
+            controller: 'WaveHolderCtrl'
+          }
+        }
+      })
+      .state('app.my.waveAttend', {
+        url: '/waveAttend',
+        views: {
+          'waveAttend': {
+            templateUrl: 'templates/chartAttend.html',
+            controller: 'WaveAttendCtrl'
           }
         }
       })

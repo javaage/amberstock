@@ -26,6 +26,10 @@ angular.module('starter.controllers', ['ngTable'])
             });
         };
 
+        $scope.reload = function(){
+            location.reload();
+        }
+
         // Form data for the login modal
         $scope.loginData = {};
         $scope.player = null;
@@ -346,25 +350,259 @@ angular.module('starter.controllers', ['ngTable'])
                 }
         });
 
+        $scope.changeTab = function(trans){
+            $scope.url = "https://ichess.sinaapp.com/" + trans + ".php";
+            $scope.getCounter($scope.url,$scope);
+        };
+
     }).controller('TransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
         $scope.changeTime = function(t){
             $scope.url = "https://ichess.sinaapp.com/trans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
-        $scope.changeTime('');
+        //$scope.changeTime('');
     }).controller('BktransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.changeTime = function(t){
             $scope.url = "https://ichess.sinaapp.com/bktrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
-        $scope.changeTime('');
+        //$scope.changeTime('');
     }).controller('CtransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.changeTime = function(t){
             $scope.url = "https://ichess.sinaapp.com/ctrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
-        $scope.changeTime('');
+        //$scope.changeTime('');
+    }).controller('MyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $interval) {
+        $scope.changeTab = function(trans){
+            switch(trans)
+            {
+            case 'holder':
+                $scope.url = "https://ichess.sinaapp.com/holder.php";
+                $scope.getCounter($scope.url,$scope);  
+                break;
+            case 'attend':
+                $scope.url = "https://ichess.sinaapp.com/attend.php";
+                $scope.getCounter($scope.url,$scope);
+                break;
+            case 'waveHolder':
+                var codes = 'sz002594,sh601390';
+                var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
+                
+                var yAxis = [{
+                    labels: {
+                        format: '{value}'
+                    },
+                    opposite: false
+                }, {
+                    labels: {
+                        format: '{value}'
+                    },
+                    opposite: true
+                }];
+
+                var charts = [];
+
+                $scope.createChart = function (container, seriesOptions, name) {
+                    for (var v in seriesOptions) {
+                        if (seriesOptions[v].name == 'sh000001') {
+                            seriesOptions[v].yAxis = 0;
+                        } else {
+                            seriesOptions[v].yAxis = 1;
+                        }
+                    }
+
+                    if(charts[container]){
+                        for(var i = 0; i < charts[container].series.length; i++){
+                            charts[container].series[i].setData(seriesOptions[i].data);
+                        }
+                    }else{
+                        charts[container] = new Highcharts.stockChart({
+                            chart: {
+                                renderTo: container
+                            },
+                            rangeSelector: {
+                                selected: 1
+                            },
+                            legend:{
+                                enabled: true,
+                                align: 'left',
+                                verticalAlign: 'middle',
+                                layout: 'vertical'
+                            },
+                            plotOptions: {
+                                series: {
+                                    events: {
+                                        legendItemClick: function(event) {
+                                            var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + event.target.name;
+                                            $http.get(urlDetete)
+                                                .success(function (data) {
+                                                    $('div#' + event.target.name).remove();
+                                                });
+                                        }
+                                    }
+                                }
+                            },
+                            navigator: {
+                                enabled: false
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            scrollbar: {
+                                enabled: true
+                            },
+                            yAxis: yAxis,
+                            series: seriesOptions
+                        });
+                    }
+                    
+                };
+
+                $scope.getindex = function (code,name) {
+                    $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
+                        .success(function (data) {
+                            console.log(data);
+
+                            var lst = data[0]['data'];
+                            if (lst && lst.length > 0) {
+                                lt = lst[lst.length - 1][0];
+                            }
+                            $scope.createChart(code, data, name);
+                    });
+                };
+                var getHolder = function () {
+                    var url = 'https://ichess.sinaapp.com/holder.php';
+                    $http.get(url)
+                        .success(function (data) {
+                            for (var i in data) {
+                                var item = data[i];
+                                var code = item.code.toLowerCase();
+                                $('#holder').append('<div id="' + code + '"></div>');
+                                $scope.getindex(code,item.name);
+                            }
+                        })
+                        .finally(function() {
+                            $scope.$broadcast('scroll.refreshComplete');
+                        });
+                };
+
+                getHolder();
+
+                $rootScope.loop = $interval(function (){ getHolder() }, 10000);
+                break;
+            case 'waveAttend':
+                var codes = 'sz002594,sh601390';
+                var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
+
+                var charts = [];
+
+                $scope.createChart = function (container, seriesOptions, name) {
+                    var yAxis = [{
+                        labels: {
+                            format: '{value}'
+                        },
+                        opposite: false
+                    }, {
+                        labels: {
+                            format: '{value}'
+                        },
+                        opposite: true
+                    }];
+
+                    for (var v in seriesOptions) {
+                        if (seriesOptions[v].name == 'sh000001') {
+                            seriesOptions[v].yAxis = 0;
+                        } else {
+                            seriesOptions[v].yAxis = 1;
+                        }
+                    }
+
+                    if(charts[container]){
+                        for(var i = 0; i < charts[container].series.length; i++){
+                            charts[container].series[i].setData(seriesOptions[i].data);
+                        }
+                    }else{
+                        charts[container] = new Highcharts.stockChart({
+                            chart: {
+                                renderTo: container
+                            },
+                            rangeSelector: {
+                                selected: 1
+                            },
+                            legend:{
+                                enabled: true,
+                                align: 'left',
+                                verticalAlign: 'middle',
+                                layout: 'vertical'
+                            },
+                            plotOptions: {
+                                series: {
+                                    events: {
+                                        legendItemClick: function(event) {
+                                            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + event.target.name;
+                                            $http.get(urlDetete)
+                                                .success(function (data) {
+                                                    $('div#' + event.target.name).remove();
+                                                });
+                                        }
+                                    }
+                                }
+                            },
+                            navigator: {
+                                enabled: false
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            scrollbar: {
+                                enabled: true
+                            },
+                            yAxis: yAxis,
+                            series: seriesOptions
+                        });
+                    }
+                    
+                };
+
+                $scope.getindex = function (code,name) {
+                    $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
+                        .success(function (data) {
+                            console.log(data);
+
+                            var lst = data[0]['data'];
+                            if (lst && lst.length > 0) {
+                                lt = lst[lst.length - 1][0];
+                            }
+                            $scope.createChart(code, data, name);
+                    });
+                };
+                var getAttend = function () {
+                    var url = 'https://ichess.sinaapp.com/attend.php';
+                    $http.get(url)
+                        .success(function (data) {
+                            for (var i in data) {
+                                var item = data[i];
+                                var code = item.code.toLowerCase();
+                                $('#attend').append('<div id="' + code + '"></div>');
+                                $scope.getindex(code,item.name);
+                            }
+                        })
+                        .finally(function() {
+                            $scope.$broadcast('scroll.refreshComplete');
+                        });
+                };
+
+                getAttend();
+
+                $rootScope.loop = $interval(function (){ getAttend() }, 10000);
+                break;
+            default:
+                console.log('default');
+            }
+        };
+
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
         $scope.url = "https://ichess.sinaapp.com/holder.php";
@@ -504,216 +742,10 @@ angular.module('starter.controllers', ['ngTable'])
         
 
     }).controller('WaveHolderCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
-        var codes = 'sz002594,sh601390';
-        var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
         
-        var yAxis = [{
-            labels: {
-                format: '{value}'
-            },
-            opposite: false
-        }, {
-            labels: {
-                format: '{value}'
-            },
-            opposite: true
-        }];
-
-        var charts = [];
-
-        $scope.createChart = function (container, seriesOptions, name) {
-            for (var v in seriesOptions) {
-                if (seriesOptions[v].name == 'sh000001') {
-                    seriesOptions[v].yAxis = 0;
-                } else {
-                    seriesOptions[v].yAxis = 1;
-                }
-            }
-
-            if(charts[container]){
-                for(var i = 0; i < charts[container].series.length; i++){
-                    charts[container].series[i].setData(seriesOptions[i].data);
-                }
-            }else{
-                charts[container] = new Highcharts.stockChart({
-                    chart: {
-                        renderTo: container
-                    },
-                    rangeSelector: {
-                        selected: 1
-                    },
-                    legend:{
-                        enabled: true,
-                        align: 'left',
-                        verticalAlign: 'middle',
-                        layout: 'vertical'
-                    },
-                    plotOptions: {
-                        series: {
-                            events: {
-                                legendItemClick: function(event) {
-                                    var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + event.target.name;
-                                    $http.get(urlDetete)
-                                        .success(function (data) {
-                                            $('div#' + event.target.name).remove();
-                                        });
-                                }
-                            }
-                        }
-                    },
-                    navigator: {
-                        enabled: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    scrollbar: {
-                        enabled: true
-                    },
-                    yAxis: yAxis,
-                    series: seriesOptions
-                });
-            }
-            
-        };
-
-        $scope.getindex = function (code,name) {
-            $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
-                .success(function (data) {
-                    console.log(data);
-
-                    var lst = data[0]['data'];
-                    if (lst && lst.length > 0) {
-                        lt = lst[lst.length - 1][0];
-                    }
-                    $scope.createChart(code, data, name);
-            });
-        };
-        var getHolder = function () {
-            var url = 'https://ichess.sinaapp.com/holder.php';
-            $http.get(url)
-                .success(function (data) {
-                    for (var i in data) {
-                        var item = data[i];
-                        var code = item.code.toLowerCase();
-                        $('#holder').append('<div id="' + code + '"></div>');
-                        $scope.getindex(code,item.name);
-                    }
-                })
-                .finally(function() {
-                    $scope.$broadcast('scroll.refreshComplete');
-                });
-        };
-
-        getHolder();
-
-        $rootScope.loop = $interval(function (){ getHolder() }, 10000);
         
     }).controller('WaveAttendCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
-        var codes = 'sz002594,sh601390';
-        var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
-
-        var charts = [];
-
-        $scope.createChart = function (container, seriesOptions, name) {
-            var yAxis = [{
-                labels: {
-                    format: '{value}'
-                },
-                opposite: false
-            }, {
-                labels: {
-                    format: '{value}'
-                },
-                opposite: true
-            }];
-
-            for (var v in seriesOptions) {
-                if (seriesOptions[v].name == 'sh000001') {
-                    seriesOptions[v].yAxis = 0;
-                } else {
-                    seriesOptions[v].yAxis = 1;
-                }
-            }
-
-            if(charts[container]){
-                for(var i = 0; i < charts[container].series.length; i++){
-                    charts[container].series[i].setData(seriesOptions[i].data);
-                }
-            }else{
-                charts[container] = new Highcharts.stockChart({
-                    chart: {
-                        renderTo: container
-                    },
-                    rangeSelector: {
-                        selected: 1
-                    },
-                    legend:{
-                        enabled: true,
-                        align: 'left',
-                        verticalAlign: 'middle',
-                        layout: 'vertical'
-                    },
-                    plotOptions: {
-                        series: {
-                            events: {
-                                legendItemClick: function(event) {
-                                    var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + event.target.name;
-                                    $http.get(urlDetete)
-                                        .success(function (data) {
-                                            $('div#' + event.target.name).remove();
-                                        });
-                                }
-                            }
-                        }
-                    },
-                    navigator: {
-                        enabled: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    scrollbar: {
-                        enabled: true
-                    },
-                    yAxis: yAxis,
-                    series: seriesOptions
-                });
-            }
-            
-        };
-
-        $scope.getindex = function (code,name) {
-            $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
-                .success(function (data) {
-                    console.log(data);
-
-                    var lst = data[0]['data'];
-                    if (lst && lst.length > 0) {
-                        lt = lst[lst.length - 1][0];
-                    }
-                    $scope.createChart(code, data, name);
-            });
-        };
-        var getAttend = function () {
-            var url = 'https://ichess.sinaapp.com/attend.php';
-            $http.get(url)
-                .success(function (data) {
-                    for (var i in data) {
-                        var item = data[i];
-                        var code = item.code.toLowerCase();
-                        $('#attend').append('<div id="' + code + '"></div>');
-                        $scope.getindex(code,item.name);
-                    }
-                })
-                .finally(function() {
-                    $scope.$broadcast('scroll.refreshComplete');
-                });
-        };
-
-        getAttend();
-
-        $rootScope.loop = $interval(function (){ getAttend() }, 10000);
+        
         
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, NgTableParams) {
 
