@@ -7,11 +7,11 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanitize'])
 
   .run(function ($ionicPlatform, $rootScope, $templateCache) {
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
-        if (typeof(current) !== 'undefined'){  
-            $templateCache.remove(current.templateUrl);  
-        }  
-    }); 
+     var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function ($rootScope) {  
+       $templateCache.removeAll();    
+     });  
+
+       
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -34,188 +34,220 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
       .state('app', {
         url: '/app',
         abstract: true,
-        templateUrl: 'templates/menu.html',
+        cache: false,
+        templateUrl: 'templates/menu.html?t=' + Math.floor(Date.now() / 1000),
         controller: 'AppCtrl'
       })
       .state('app.daily', {
         url: '/daily',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/daily.html',
+            templateUrl: 'templates/daily.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'DailyCtrl'
           }
         }
       })
       .state('app.short', {
         url: '/short',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/short.html',
+            templateUrl: 'templates/short.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'ShortCtrl'
           }
         }
       })
       .state('app.action', {
         url: '/action',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/action.html',
+            templateUrl: 'templates/action.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'ActionCtrl'
           }
         }
       })
       .state('app.cal', {
         url: '/cal',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/cal.html',
+            templateUrl: 'templates/cal.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'CalCtrl'
-          }
-        }
-      })
-      .state('app.trend', {
-        url: '/trend',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/trend.html',
-            controller: 'TrendCtrl'
-          }
-        }
-      })
-      .state('app.pref', {
-        url: '/pref',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/pref.html',
-            controller: 'PrefCtrl'
           }
         }
       })
       .state('app.holder', {
         url: '/holder',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/holder.html',
+            templateUrl: 'templates/holder.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'HolderCtrl'
           }
         }
       })
       .state('app.attend', {
         url: '/attend',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/attend.html',
+            templateUrl: 'templates/attend.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'AttendCtrl'
           }
         }
       })
       .state('app.waveHolder', {
         url: '/waveHolder',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/chartHolder.html',
+            templateUrl: 'templates/chartHolder.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'WaveHolderCtrl'
           }
         }
       })
       .state('app.waveAttend', {
         url: '/waveAttend',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/chartAttend.html',
+            templateUrl: 'templates/chartAttend.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'WaveAttendCtrl'
           }
         }
       })
       .state('app.popular', {
         url: '/popular',
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/popular.html',
+            templateUrl: 'templates/popular.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'PopularCtrl'
           }
         }
       })
       .state('app.tab', {
         url: '/tab',
-        //abstract: true,
+        abstract: true,
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/transTab.html',
+            templateUrl: 'templates/transTab.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'TabCtrl'
           }
         }
       })
       .state('app.tab.trans', {
         url: '/trans',
+        cache: false,
         views: {
           'trans': {
-            templateUrl: 'templates/trans.html',
+            templateUrl: 'templates/trans.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'TransCtrl'
           }
         }
       })
       .state('app.tab.bktrans', {
         url: '/bktrans',
+        cache: false,
         views: {
           'bktrans': {
-            templateUrl: 'templates/bktrans.html',
+            templateUrl: 'templates/bktrans.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'BktransCtrl'
           }
         }
       })
       .state('app.tab.ctrans', {
         url: '/ctrans',
+        cache: false,
         views: {
           'ctrans': {
-            templateUrl: 'templates/ctrans.html',
+            templateUrl: 'templates/ctrans.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'CtransCtrl'
           }
         }
       })
       .state('app.my', {
         url: '/my',
-        //abstract: true,
+        abstract: true,
+        cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/myTab.html',
+            templateUrl: 'templates/myTab.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'MyCtrl'
           }
         }
       })
       .state('app.my.holder', {
         url: '/holder',
+        cache: false,
         views: {
           'holder': {
-            templateUrl: 'templates/holder.html',
+            templateUrl: 'templates/holder.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'HolderCtrl'
           }
         }
       })
       .state('app.my.attend', {
         url: '/attend',
+        cache: false,
         views: {
           'attend': {
-            templateUrl: 'templates/attend.html',
+            templateUrl: 'templates/attend.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'AttendCtrl'
           }
         }
       })
       .state('app.my.waveHolder', {
         url: '/waveHolder',
+        cache: false,
         views: {
           'waveHolder': {
-            templateUrl: 'templates/chartHolder.html',
+            templateUrl: 'templates/chartHolder.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'WaveHolderCtrl'
           }
         }
       })
       .state('app.my.waveAttend', {
         url: '/waveAttend',
+        cache: false,
         views: {
           'waveAttend': {
-            templateUrl: 'templates/chartAttend.html',
+            templateUrl: 'templates/chartAttend.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'WaveAttendCtrl'
+          }
+        }
+      })
+      .state('app.other', {
+        url: '/other',
+        abstract: true,
+        cache: false,
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/otherTab.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'OtherCtrl'
+          }
+        }
+      })
+      .state('app.other.signal', {
+        url: '/signal',
+        cache: false,
+        views: {
+          'signal': {
+            templateUrl: 'templates/signal.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'SignalCtrl'
+          }
+        }
+      })
+      .state('app.other.wave', {
+        url: '/wave',
+        cache: false,
+        views: {
+          'wave': {
+            templateUrl: 'templates/wave.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'WaveCtrl'
           }
         }
       })

@@ -1,6 +1,6 @@
 <ion-view view-title="Above Average">
     <ion-nav-buttons side="right">
-        <select ng-model="q.t" ng-init="q.t=times[0]" ng-options="item as item.time for item in times" ng-change="changeTime(q.t)">
+        <select ng-model="q.id" ng-init="q.id=times[0].id" ng-options="item.id as item.time for item in times" ng-change="changeTime(q.id)">
         </select>
     </ion-nav-buttons>
 

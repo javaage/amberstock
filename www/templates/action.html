@@ -6,7 +6,7 @@
                 <td title="'action'" sortable="'action'">
                     {{stock.action>=0? action[stock.action]:''}}</td>
                 <td title="'time'" sortable="'time'">
-                    {{stock.time.substr(10)}}</td>
+                    <a href="#app/short?id={{stock.id}}">{{stock.time.substr(10)}}</a></td>
                 <td title="'content'" sortable="'content'">
                     {{stock.content}}</td>
                 <td title="'detail'" sortable="'detail'">
