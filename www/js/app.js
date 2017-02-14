@@ -7,9 +7,9 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanitize'])
 
   .run(function ($ionicPlatform, $rootScope, $templateCache) {
-     var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function ($rootScope) {  
-       $templateCache.removeAll();    
-     });  
+     // var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function ($rootScope) {  
+     //   $templateCache.removeAll();    
+     // });  
 
        
     $ionicPlatform.ready(function () {
