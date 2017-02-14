@@ -1,5 +1,8 @@
 <div>
   <ion-tabs class="tabs-icon-top tabs-color-active-positive">
+    <ion-tab title="Daily" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/app/other/daily" on-select="changeTab('daily')">
+      <ion-nav-view name="daily"></ion-nav-view>
+    </ion-tab>
 
     <!-- Dashboard Tab -->
     <ion-tab title="Signal" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/app/other/signal" on-select="changeTab('signal')">

@@ -13,6 +13,9 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
+        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
@@ -22,18 +25,18 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
-        },
         "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         },
-        "cordova-plugin-fullscreen": {
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
+        },
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ionicframework.ionicproject474537"
         }
     }

@@ -315,11 +315,11 @@ angular.module('starter.controllers', ['ngTable'])
                 }
         });
 
+    }).controller('OtherCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        
     }).controller('DailyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/daily/analysis.php";
         $scope.getCounter($scope.url,$scope);
-    }).controller('OtherCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        
     }).controller('WaveCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
 
         $scope.url = "https://ichess.sinaapp.com/rate.php";
@@ -348,6 +348,13 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.getCounter($scope.url,$scope);
         };
 
+    }).controller('RateCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        
+        $scope.changeTime = function(t){
+            $scope.url = "https://ichess.sinaapp.com/rate.php?t=" + t;
+            $scope.getCounter($scope.url,$scope);
+        };
+        //$scope.changeTime('');
     }).controller('TransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
         $scope.changeTime = function(t){

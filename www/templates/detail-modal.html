@@ -26,33 +26,32 @@
                 <button ng-click="deleteAttend(code)" style="width:30%">Delete</button>
                 <button ng-click="closeModal()" style="width:30%">Close</button>
             </div>
-            <div>
-                <!-- Nav tabs -->
-                <ul id="myTabs" class="nav nav-tabs" role="tablist">
-                    <li role="presentation" >
-                        <a href="#minite" aria-controls="home" role="tab" data-toggle="tab">分时图</a>
-                    </li>
-                    <li role="presentation" class="active">
-                        <a href="#daily" aria-controls="profile" role="tab" data-toggle="tab">日线图</a>
-                    </li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane" id="minite">
-                        <div id="divMinite" class="item active">
-                            <img id="imgMinite">
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane active" id="daily">
-                        <div id="divDaily" class="item">
-                            <img id="imgDaily">
-                        </div>
-                    </div>
-                </div>
-
+<div>
+    <!-- Nav tabs -->
+    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation">
+            <a href="#minite" aria-controls="home" role="tab" data-toggle="tab">分时图</a>
+        </li>
+        <li role="presentation" class="active">
+            <a href="#daily" aria-controls="profile" role="tab" data-toggle="tab">日线图</a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" id="minite">
+            <div id="divMinite" class="item active">
+                <img id="imgMinite">
             </div>
         </div>
+        <div role="tabpanel" class="tab-pane active" id="daily">
+            <div id="divDaily" class="item">
+                <img id="imgDaily">
+            </div>
+        </div>
+    </div>
 
-    </ion-content>
+</div>
+</div>
+
+</ion-content>
 </ion-modal-view>

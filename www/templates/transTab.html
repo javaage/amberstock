@@ -1,6 +1,10 @@
 <div>
   <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
+    <ion-tab title="Rate" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/app/tab/rate" on-select="changeTab('rate')">
+      <ion-nav-view name="rate"></ion-nav-view>
+    </ion-tab>
+
     <!-- Dashboard Tab -->
     <ion-tab title="Trans" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/app/tab/trans" on-select="changeTab('trans')">
       <ion-nav-view name="trans"></ion-nav-view>

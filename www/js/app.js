@@ -28,7 +28,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    //$locationProvider.html5Mode(true).hashPrefix('!');
+
     $stateProvider
 
       .state('app', {
@@ -37,16 +39,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
         cache: false,
         templateUrl: 'templates/menu.html?t=' + Math.floor(Date.now() / 1000),
         controller: 'AppCtrl'
-      })
-      .state('app.daily', {
-        url: '/daily',
-        cache: false,
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/daily.html?t=' + Math.floor(Date.now() / 1000),
-            controller: 'DailyCtrl'
-          }
-        }
       })
       .state('app.short', {
         url: '/short',
@@ -139,7 +131,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('app.tab.trans', {
+      .state('app.tab.rate', {
+        url: '/rate',
+        cache: false,
+        views: {
+          'rate': {
+            templateUrl: 'templates/rate.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'RateCtrl'
+          }
+        }
+      }).state('app.tab.trans', {
         url: '/trans',
         cache: false,
         views: {
@@ -231,6 +232,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
+      .state('app.other.daily', {
+        url: '/daily',
+        cache: false,
+        views: {
+          'daily': {
+            templateUrl: 'templates/daily.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'DailyCtrl'
+          }
+        }
+      })
       .state('app.other.signal', {
         url: '/signal',
         cache: false,
@@ -250,8 +261,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
             controller: 'WaveCtrl'
           }
         }
-      })
-      ;
-    // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/action');
+      });
+      // if none of the above states are matched, use this as the fallback
+      $urlRouterProvider.otherwise('/app/action');
   });
