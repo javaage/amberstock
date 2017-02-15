@@ -1,11 +1,12 @@
 angular.module('starter.controllers', ['ngTable'])
 
-    .controller('AppCtrl', function ($rootScope,$scope, $ionicModal, $timeout, $http, $interval, NgTableParams) {
+    .controller('AppCtrl', function ($rootScope,$scope, $ionicModal, $timeout, $http, $interval, NgTableParams, $location) {
         Highcharts.setOptions({ global: { useUTC: false } });
         var dailyUrlTmp = "https://image.sinajs.cn/newchart/daily/n/sh600000.gif";
         var miniteUrlTmp = "https://image.sinajs.cn/newchart/min/n/sh600000.gif";
         var maxImgWidth = document.body.clientWidth * 0.9;
         $scope.ting = {};
+        $scope.location = $location;
         var addGif = function () {
             $("table.table tr").each(function () {
                 var td = $("<td></td>");
@@ -323,6 +324,11 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('WaveCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
 
         $scope.url = "https://ichess.sinaapp.com/rate.php";
+        $scope.getCounter($scope.url,$scope);
+
+    }).controller('AscendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+
+        $scope.url = "https://ichess.sinaapp.com/daily/ascend.php";
         $scope.getCounter($scope.url,$scope);
 
     }).controller('SignalCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
@@ -975,8 +981,8 @@ angular.module('starter.controllers', ['ngTable'])
                         isPlay = false;
                     }
 
-                    // maxValue += 5;
-                    // minValue -= 5;
+                    maxValue += 1;
+                    minValue -= 1;
 
                     var yAxis = [{
                         labels: {

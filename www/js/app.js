@@ -29,10 +29,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
   })
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    //$locationProvider.html5Mode(true).hashPrefix('!');
+    // $locationProvider.html5Mode(true).hashPrefix('!');
 
     $stateProvider
-
+      .state('minite', {
+        url: '/minite',
+        cache: false
+      })
+      .state('daily', {
+        url: '/daily',
+        cache: false
+      })
       .state('app', {
         url: '/app',
         abstract: true,
@@ -259,6 +266,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           'wave': {
             templateUrl: 'templates/wave.html?t=' + Math.floor(Date.now() / 1000),
             controller: 'WaveCtrl'
+          }
+        }
+      })
+      .state('app.other.ascend', {
+        url: '/ascend',
+        cache: false,
+        views: {
+          'ascend': {
+            templateUrl: 'templates/ascend.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'AscendCtrl'
           }
         }
       });
