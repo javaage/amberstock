@@ -176,6 +176,21 @@ angular.module('starter.controllers', ['ngTable'])
                         }
                     }
                     
+                    for(var i = 0; i < data.length; i++){
+                        var item = data[i];
+                        if(item.rate){
+                            item.rate = parseFloat(item.rate);
+                        }
+                        if(item.increase){
+                            item.increase = parseFloat(item.increase);
+                        }
+                        if(item.a){
+                            item.a = parseFloat(item.a);
+                        }
+                        if(item.trans){
+                            item.trans = parseFloat(item.trans);
+                        }
+                    }
 
                     $scope.tableParams = new NgTableParams(
                         {
