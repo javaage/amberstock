@@ -333,6 +333,9 @@ angular.module('starter.controllers', ['ngTable'])
 
     }).controller('OtherCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
+    }).controller('Test2Ctrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.url = "https://ichess.sinaapp.com/other/test2.php";
+        $scope.getCounter($scope.url,$scope);
     }).controller('DailyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/daily/analysis.php";
         $scope.getCounter($scope.url,$scope);

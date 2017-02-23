@@ -57,6 +57,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
+      .state('app.test2', {
+        url: '/test2',
+        cache: false,
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/test2.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'Test2Ctrl'
+          }
+        }
+      })
       .state('app.action', {
         url: '/action',
         cache: false,
