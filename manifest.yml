@@ -1,5 +1,5 @@
 applications:
-  - name: amber # Step 1: Change your application name
+  - name: p-test # Step 1: Change your application name
     buildpack: staticfile_buildpack 
     path: platforms/browser/www
     memory: 128M

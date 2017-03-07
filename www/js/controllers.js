@@ -1,12 +1,99 @@
 angular.module('starter.controllers', ['ngTable'])
-
-    .controller('AppCtrl', function ($rootScope,$scope, $ionicModal, $timeout, $http, $interval, NgTableParams, $location) {
+    .controller('AppCtrl', function ($rootScope,$scope, $ionicModal, $timeout, $http, $interval, NgTableParams, $location, $cordovaLocalNotification) {
         Highcharts.setOptions({ global: { useUTC: false } });
         var dailyUrlTmp = "https://image.sinajs.cn/newchart/daily/n/sh600000.gif";
         var miniteUrlTmp = "https://image.sinajs.cn/newchart/min/n/sh600000.gif";
         var maxImgWidth = document.body.clientWidth * 0.9;
         $scope.ting = {};
         $scope.location = $location;
+
+        $scope.socketUrl = '';
+
+        var socket;
+        if($scope.player)
+            $scope.player.pause();
+
+        $scope.notify = function(title,message) {
+            if($scope.player)
+                $scope.player.pause();
+            isPlay = true;
+            $scope.player = document.getElementById('buymp3');
+            $scope.player.play();  
+
+          var alarmTime = new Date();
+          alarmTime.setSeconds(alarmTime.getSeconds() + 1);
+          $cordovaLocalNotification.add({
+            id: "1234",
+            date: alarmTime,
+            message: message,
+            title: title,
+            autoCancel: true,
+            sound: "file://system/media/audio/notifications/Default.ogg"
+          }).then(function () {
+            alert("The notification has been set");
+            console.log("The notification has been set");
+          });
+        };
+
+        $scope.isScheduled = function() {
+          $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
+            alert("Notification 1234 Scheduled: " + isScheduled);
+          });
+        };
+
+        $scope.initWebSocket = function(){
+          if (window.WebSocket) {
+            if (socket == null || socket.readyState !== 1) {
+                socket = new WebSocket($scope.socketUrl);
+                socket.onmessage = function(event) { 
+                  console.log(event.data);
+
+                  var title = '';
+                  var message = '';
+
+                  var body = eval('(' + event.data + ')');
+
+                  if(body.title){
+                    title = body.title;
+                  }
+
+                  if(body.message){
+                    message = body.message;
+                  }
+
+                  $scope.notify(title,message);
+                }; 
+
+                socket.onclose = function(event) { 
+                  console.log(event);
+                }; 
+                
+                socket.onopen = function(event) { 
+                    console.log(event);
+                }; 
+                socket.onerror =function(event){
+                  alert("web socket 出错。");
+                };
+            }  
+          } else {
+            alert("你的浏览器不支持web socket.");
+          }
+        };
+
+        $scope.send = function(message) {
+            $scope.initWebSocket();
+            socket.send(message);
+        };
+
+        $scope.getSocketUrl = function(){
+            $http.get('https://ichess.sinaapp.com/ext/channel.php')//('https://ichess.sinaapp.com/ext/channel.php')
+            .success(function (data) {
+                $scope.socketUrl = data;
+                $scope.initWebSocket();
+                $interval(function (){ $scope.initWebSocket() }, 10000);
+            });
+        };
+
         var addGif = function () {
             $("table.table tr").each(function () {
                 var td = $("<td></td>");
@@ -146,16 +233,6 @@ angular.module('starter.controllers', ['ngTable'])
                     if(url.indexOf('actionList')>=0){
                         var frequency = [];
 
-                        // for(var index in data){
-                        //     var item = data[index];
-                        //     var names = item.pref.split(',');
-                        //     var codes = item.pref1.split(',');
-
-                        //     for(var i in names){
-                        //         frequency[codes[i]] = frequency[codes[i]]? ++frequency[codes[i]] : 1;
-                        //     }
-                        // }
-
                         for(var index = data.length-1; index>=0; index--){
                             var item = data[index];
                             var names = item.pref.split(',');
@@ -208,6 +285,8 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
+        $scope.getSocketUrl();
+
         var locationChangeStart = function(){
             if($rootScope.loop){
                 $interval.cancel($rootScope.loop);
@@ -220,15 +299,21 @@ angular.module('starter.controllers', ['ngTable'])
     .controller('CalCtrl', function ($rootScope,$scope, $http, $ionicModal,$cordovaLocalNotification, NgTableParams) {
 
         $scope.add = function() {
+            if($scope.player)
+                $scope.player.pause();
+            isPlay = true;
+            $scope.player = document.getElementById('buymp3');
+            $scope.player.play();    
+
           var alarmTime = new Date();
-          alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+          alarmTime.setSeconds(alarmTime.getSeconds() + 1);
           $cordovaLocalNotification.add({
             id: "1234",
             date: alarmTime,
             message: "This is a message",
             title: "This is a title",
             autoCancel: true,
-            sound: null
+            sound: "file://system/media/audio/notifications/Default.ogg"
           }).then(function () {
             alert("The notification has been set");
             console.log("The notification has been set");
