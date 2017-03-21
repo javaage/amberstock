@@ -418,9 +418,73 @@ angular.module('starter.controllers', ['ngTable'])
 
     }).controller('OtherCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
-    }).controller('Test2Ctrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+    }).controller('InspectCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/other/test2.php";
         $scope.getCounter($scope.url,$scope);
+
+        $scope.search = {};
+        $scope.q = {};
+        $scope.types = ["val", "rate"];
+        $scope.opts = [">", "<"];
+
+        $scope.url = "https://ichess.sinaapp.com/inspect.php";
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(item){
+            $scope.q.stock.code = item.code;
+            $scope.q.stock.name = item.name;
+            $scope.searchStocks = [];
+        };
+
+        
+
+        $scope.addInspect = function(q){
+            var data = {
+                a: "a",
+                code: $scope.q.stock.code,
+                name: $scope.q.stock.name,
+                type: $scope.q.type,
+                opt: $scope.q.opt,
+                value: $scope.q.value
+            };
+             var urlAdd = "http://ichess.sinaapp.com/inspect.php?" + $.param(data);
+             $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.loadInspect();
+                    console.log(data);
+                });
+        };
+
+        $scope.deleteInspect = function(id){
+            var data = {
+                a: "d",
+                id: id
+            };
+            var urlDelete = "http://ichess.sinaapp.com/inspect.php?" + $.param(data);
+            $http.get(urlDelete)
+                .success(function (data) {
+                    $scope.loadInspect();
+                    console.log(data);
+                });
+        };
+
+        $scope.loadInspect = function(){
+            $scope.url = "http://ichess.sinaapp.com/inspect.php";
+            $scope.getCounter($scope.url,$scope);
+        };
+
+        $scope.loadInspect();
     }).controller('DailyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.url = "https://ichess.sinaapp.com/daily/analysis.php";
         $scope.getCounter($scope.url,$scope);

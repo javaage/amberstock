@@ -57,13 +57,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
-      .state('app.test2', {
-        url: '/test2',
+      .state('app.inspect', {
+        url: '/inspect',
         cache: false,
         views: {
           'menuContent': {
-            templateUrl: 'templates/test2.html?t=' + Math.floor(Date.now() / 1000),
-            controller: 'Test2Ctrl'
+            templateUrl: 'templates/inspect.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'InspectCtrl'
           }
         }
       })
