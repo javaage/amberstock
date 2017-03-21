@@ -285,7 +285,7 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
-        $scope.getSocketUrl();
+        //$scope.getSocketUrl();
 
         var locationChangeStart = function(){
             if($rootScope.loop){
