@@ -546,7 +546,6 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.url = "https://ichess.sinaapp.com/ctrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
-        //$scope.changeTime('');
     }).controller('MyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $interval) {
         $scope.changeTab = function(trans){
             switch(trans)
@@ -557,6 +556,10 @@ angular.module('starter.controllers', ['ngTable'])
                 break;
             case 'attend':
                 $scope.url = "https://ichess.sinaapp.com/attend.php";
+                $scope.getCounter($scope.url,$scope);
+                break;
+            case 'weak':
+                $scope.url = "https://ichess.sinaapp.com/weak.php";
                 $scope.getCounter($scope.url,$scope);
                 break;
             case 'waveHolder':
@@ -862,7 +865,56 @@ angular.module('starter.controllers', ['ngTable'])
                     alert('delete successfully.');
                 });
         };
-    }).controller('ChartCtrl', function ($rootScope,$scope,$interval) {
+    }).controller('WeakCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.search = {};
+
+        $scope.url = "https://ichess.sinaapp.com/weak.php";
+        $scope.getCounter($scope.url,$scope);
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addWeak = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+
+        $scope.deleteAll = function(){
+
+            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=d";
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                });
+        };
+        $scope.deleteAttend = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/weak.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url);
+                    alert('delete successfully.');
+                });
+        };
+    })
+    .controller('ChartCtrl', function ($rootScope,$scope,$interval) {
         
         var chart = new Highcharts.stockChart({
             chart: {

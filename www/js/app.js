@@ -218,6 +218,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
+      .state('app.my.weak', {
+        url: '/weak',
+        cache: false,
+        views: {
+          'weak': {
+            templateUrl: 'templates/weak.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'WeakCtrl'
+          }
+        }
+      })
       .state('app.my.waveHolder', {
         url: '/waveHolder',
         cache: false,
