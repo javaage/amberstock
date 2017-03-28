@@ -222,9 +222,13 @@ angular.module('starter.controllers', ['ngTable'])
         };
         $scope.closeModal = function () {
             $scope.modal.hide();
+            console.log(window.location.href);
+            if(window.location.href.indexOf('app/my/attend')>0)
+                window.location.reload();
         };
 
-        $scope.getCounter = function (url) {
+        $scope.getCounter = function (url,scope) {
+            $scope.url = url;
 
             $http.get(url)
                 .success(function (data) {
@@ -419,15 +423,10 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('OtherCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
     }).controller('InspectCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.url = "https://ichess.sinaapp.com/other/test2.php";
-        $scope.getCounter($scope.url,$scope);
-
         $scope.search = {};
         $scope.q = {};
         $scope.types = ["val", "rate"];
         $scope.opts = [">", "<"];
-
-        $scope.url = "https://ichess.sinaapp.com/inspect.php";
         
         $scope.searchStock = function(q){
             if(q.trim()==''){
@@ -446,8 +445,6 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.q.stock.name = item.name;
             $scope.searchStocks = [];
         };
-
-        
 
         $scope.addInspect = function(q){
             var data = {
@@ -806,14 +803,14 @@ angular.module('starter.controllers', ['ngTable'])
             var urlAdd = "https://ichess.sinaapp.com/holder.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteHolder = function(code){
             var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                     alert('delete successfully.');
             });
         };
@@ -845,7 +842,7 @@ angular.module('starter.controllers', ['ngTable'])
             var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                 });
         };
 
@@ -854,14 +851,14 @@ angular.module('starter.controllers', ['ngTable'])
             var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
             $http.get(urlAdd)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteAttend = function(code){
             var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                     alert('delete successfully.');
                 });
         };
@@ -893,7 +890,7 @@ angular.module('starter.controllers', ['ngTable'])
             var urlAdd = "https://ichess.sinaapp.com/weak.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                 });
         };
 
@@ -902,14 +899,14 @@ angular.module('starter.controllers', ['ngTable'])
             var urlAdd = "https://ichess.sinaapp.com/weak.php?a=d";
             $http.get(urlAdd)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteAttend = function(code){
             var urlDetete = "https://ichess.sinaapp.com/weak.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
-                    $scope.getCounter($scope.url);
+                    $scope.getCounter($scope.url,$scope);
                     alert('delete successfully.');
                 });
         };
@@ -1168,37 +1165,37 @@ angular.module('starter.controllers', ['ngTable'])
                         }
                     }
 
-                    if (typeof (arr[3][arr[3].length - 1]) == "object" && (new Date()).getTime() - arr[3][arr[3].length - 1][0] < 5 * 60 * 1000  && !isPlay) { //buy
-                        console.log("buy");
-                        if($scope.player)
-                            $scope.player.pause();
-                        isPlay = true;
-                        $scope.player = document.getElementById('buymp3');
-                        $scope.player.play();
-                    } else if (typeof (arr[4][arr[4].length - 1]) == "object" && (new Date()).getTime() - arr[4][arr[4].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //sell
-                        console.log("sell");
-                        if($scope.player)
-                            $scope.player.pause();
-                        isPlay = true;
-                        $scope.player = document.getElementById('sellmp3');
-                        $scope.player.play();
-                    } else if (typeof (arr[5][arr[5].length - 1]) == "object" && (new Date()).getTime() - arr[5][arr[5].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre buy
-                        console.log("pre buy");
-                        if($scope.player)
-                            $scope.player.pause();
-                        isPlay = true;
-                        $scope.player = document.getElementById('pbuymp3');
-                        $scope.player.play();
-                    } else if (typeof (arr[6][arr[6].length - 1]) == "object" && (new Date()).getTime() - arr[6][arr[6].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre sell
-                        console.log("pre sell");
-                        if($scope.player)
-                            $scope.player.pause();
-                        isPlay = true;
-                        $scope.player = document.getElementById('psellmp3');
-                        $scope.player.play();
-                    } else {
-                        isPlay = false;
-                    }
+                    // if (typeof (arr[3][arr[3].length - 1]) == "object" && (new Date()).getTime() - arr[3][arr[3].length - 1][0] < 5 * 60 * 1000  && !isPlay) { //buy
+                    //     console.log("buy");
+                    //     if($scope.player)
+                    //         $scope.player.pause();
+                    //     isPlay = true;
+                    //     $scope.player = document.getElementById('buymp3');
+                    //     $scope.player.play();
+                    // } else if (typeof (arr[4][arr[4].length - 1]) == "object" && (new Date()).getTime() - arr[4][arr[4].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //sell
+                    //     console.log("sell");
+                    //     if($scope.player)
+                    //         $scope.player.pause();
+                    //     isPlay = true;
+                    //     $scope.player = document.getElementById('sellmp3');
+                    //     $scope.player.play();
+                    // } else if (typeof (arr[5][arr[5].length - 1]) == "object" && (new Date()).getTime() - arr[5][arr[5].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre buy
+                    //     console.log("pre buy");
+                    //     if($scope.player)
+                    //         $scope.player.pause();
+                    //     isPlay = true;
+                    //     $scope.player = document.getElementById('pbuymp3');
+                    //     $scope.player.play();
+                    // } else if (typeof (arr[6][arr[6].length - 1]) == "object" && (new Date()).getTime() - arr[6][arr[6].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre sell
+                    //     console.log("pre sell");
+                    //     if($scope.player)
+                    //         $scope.player.pause();
+                    //     isPlay = true;
+                    //     $scope.player = document.getElementById('psellmp3');
+                    //     $scope.player.play();
+                    // } else {
+                    //     isPlay = false;
+                    // }
 
                     maxValue += 1;
                     minValue -= 1;
