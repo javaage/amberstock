@@ -1,0 +1,43 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "Stock"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "Stock"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "Stock"
+        }
+    }
+}

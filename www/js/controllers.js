@@ -224,7 +224,8 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.modal.hide();
             console.log(window.location.href);
             if(window.location.href.indexOf('app/my/attend')>0)
-                window.location.reload();
+                $scope.getCounter($scope.url);
+                //window.location.reload();
         };
 
         $scope.getCounter = function (url,scope) {
