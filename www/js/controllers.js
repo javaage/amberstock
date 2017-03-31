@@ -456,7 +456,7 @@ angular.module('starter.controllers', ['ngTable'])
                 opt: $scope.q.opt,
                 value: $scope.q.value
             };
-             var urlAdd = "http://ichess.sinaapp.com/inspect.php?" + $.param(data);
+             var urlAdd = "https://ichess.sinaapp.com/inspect.php?" + $.param(data);
              $http.get(urlAdd)
                 .success(function (data) {
                     $scope.loadInspect();
@@ -469,7 +469,7 @@ angular.module('starter.controllers', ['ngTable'])
                 a: "d",
                 id: id
             };
-            var urlDelete = "http://ichess.sinaapp.com/inspect.php?" + $.param(data);
+            var urlDelete = "https://ichess.sinaapp.com/inspect.php?" + $.param(data);
             $http.get(urlDelete)
                 .success(function (data) {
                     $scope.loadInspect();
@@ -478,7 +478,7 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.loadInspect = function(){
-            $scope.url = "http://ichess.sinaapp.com/inspect.php";
+            $scope.url = "https://ichess.sinaapp.com/inspect.php";
             $scope.getCounter($scope.url,$scope);
         };
 
