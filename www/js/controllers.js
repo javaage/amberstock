@@ -973,12 +973,9 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, NgTableParams) {
 
         $scope.days = [1,5,20,100];
-        $scope.aspect = "main";
+        $scope.codes = ['sz399006','sz399001','sz399678'];
         var oldData = [];
-        oldData[1] = [];
-        oldData[5] = [];
-        oldData[20] = [];
-        oldData[100] = [];
+        var code = 'sz399006';
 
         var n = 1;
         var t = 0;
@@ -1008,11 +1005,7 @@ angular.module('starter.controllers', ['ngTable'])
             if(chart!=null)
                 chart.destroy();
             chart = null;
-            
-            oldData[1] = [];
-            oldData[5] = [];
-            oldData[20] = [];
-            oldData[100] = [];
+            oldData=[];
 
             t = 0;
 
@@ -1024,37 +1017,29 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.changeLevel = function(day){
             initChart();
             n = parseInt(day);
-            calPopular(n, r);
+            calPopular(n, code);
         }
 
-        $scope.changeAspect = function (n) {
+        $scope.changeCode = function(c){
+            code = c;
             initChart();
-
-            if ($scope.aspect == "main") {
-                r = 1;
-                $scope.aspect = "little";
-            } else {
-                r = 0;
-                $scope.aspect = "main";
-            }
-
-            calPopular(n, r);
-        };
+            calPopular(n, code);
+        }
 
         $scope.stopSound = function(){
             initChart();
-            calPopular(n, r);
+            calPopular(n, code);
 
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
         };
 
-        function calPopular(n, r) {
+        function calPopular(n, code) {
             var p = {
                     n: n,
                     t: t,
-                    r: r
+                    code: code
                 };
 
             $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p))
@@ -1067,9 +1052,9 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxColumn = 0;
                     var minValue = 100000;
                     var maxValue = 0;
-                    data = oldData[n].concat(data);
+                    data = oldData.concat(data);
                     
-                    oldData[n] = data.slice();
+                    oldData = data.slice();
 
                     var arr = [];
                      arr[0] = [];
@@ -1329,12 +1314,12 @@ angular.module('starter.controllers', ['ngTable'])
                 })
                 .error(function(error){
                     console.log(error);
-                    oldData[n] = [];
+                    oldData = [];
                     t = 0;
                 });
         };
 
         initChart();
-        calPopular(n, r);
-        $rootScope.loop = $interval(function (){ calPopular(n, r) }, 10000);
+        calPopular(n, code);
+        $rootScope.loop = $interval(function (){ calPopular(n, code) }, 10000);
     });
