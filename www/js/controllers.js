@@ -1047,6 +1047,10 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.$broadcast('scroll.refreshComplete');
         };
 
+        var sortTime = function(a, b){
+            return b[0] - a[0];
+        };
+
         function calPopular(n, code) {
             var p = {
                     n: n,
@@ -1234,6 +1238,9 @@ angular.module('starter.controllers', ['ngTable'])
                         }]
                     }];
 
+                    for(var i in arr){
+                        arr[i].sort(sortTime);
+                    }
 
                     var series = [{
                                 name: 'Column',
