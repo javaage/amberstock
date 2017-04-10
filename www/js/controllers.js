@@ -1014,13 +1014,13 @@ angular.module('starter.controllers', ['ngTable'])
         var chart = null;
 
         var initChart = function(){
+            $interval.cancel($rootScope.loop);
+
             if(chart!=null)
                 chart.destroy();
             chart = null;
             oldData=[];
-
             t = 0;
-
             isPlay = false;
             sellNotification = false;
             maxColumn = 0;
@@ -1029,18 +1029,18 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.changeLevel = function(day){
             initChart();
             n = parseInt(day);
-            calPopular(n, code);
+            calPopular(n, 0, code);
         }
 
         $scope.changeCode = function(c){
             code = c;
             initChart();
-            calPopular(n, code);
+            calPopular(n, 0, code);
         }
 
         $scope.stopSound = function(){
             initChart();
-            calPopular(n, code);
+            calPopular(n, 0, code);
 
             if($scope.player)
                 $scope.player.pause();
@@ -1051,10 +1051,10 @@ angular.module('starter.controllers', ['ngTable'])
             return b[0] - a[0];
         };
 
-        function calPopular(n, code) {
+        function calPopular(n, time, code) {
             var p = {
                     n: n,
-                    t: t,
+                    t: time,
                     code: code
                 };
 
@@ -1136,9 +1136,9 @@ angular.module('starter.controllers', ['ngTable'])
                                     append = last[1];
                                 }
                                 gt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
-                                if (gt[gt.length - 1][1] > 3) {
+                                if (gt[gt.length - 1][1] > 3.5) {
                                     arr[3].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
-                                } else if (gt[gt.length - 1][1] > 2) {
+                                } else if (gt[gt.length - 1][1] > 2.5) {
                                     arr[5].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
                                 }
                             }
@@ -1152,9 +1152,9 @@ angular.module('starter.controllers', ['ngTable'])
                                     append = last[1];
                                 }
                                 lt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
-                                if (lt[lt.length - 1][1] < -3) {
+                                if (lt[lt.length - 1][1] < -3.5) {
                                     arr[4].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
-                                } else if (lt[lt.length - 1][1] < -2) {
+                                } else if (lt[lt.length - 1][1] < -2.5) {
                                     arr[6].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
                                 }
                             }
@@ -1317,7 +1317,7 @@ angular.module('starter.controllers', ['ngTable'])
                         chart = new Highcharts.stockChart(options);
                     }else{
                         chart.yAxis[0].min = 0;
-                        chart.yAxis[0].max = maxColumn;
+                        chart.yAxis[0].max = 2*maxColumn;
                         chart.yAxis[0].isDirty = true;
                         chart.yAxis[1].min = minValue;
                         chart.yAxis[1].max = maxValue;
@@ -1332,12 +1332,12 @@ angular.module('starter.controllers', ['ngTable'])
                 })
                 .error(function(error){
                     console.log(error);
-                    oldData = [];
-                    t = 0;
+                    initChart();
                 });
         };
 
         initChart();
-        calPopular(n, code);
-        $rootScope.loop = $interval(function (){ calPopular(n, code) }, 10000);
+        calPopular(n, t, code);
+        //calPopular(n, t, code);
+        $rootScope.loop = $interval(function (){ calPopular(n, t, code) }, 10000);
     });
