@@ -278,7 +278,7 @@ angular.module('starter.controllers', ['ngTable'])
                         {
                             page: 1,            // show first page
                             count: 10,           // count per page
-                            sorting: { r: 'desc', rate: 'desc', a: 'desc' ,buy: 'desc'}
+                            sorting: { r: 'desc', rate: 'asc', a: 'desc' ,buy: 'desc'}
                         },
                         {
                             total: 0, // length of data
@@ -973,7 +973,17 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, NgTableParams) {
 
         $scope.days = [1,5,20,100];
-        $scope.codes = ['sz399006','sz399001','sz399678'];
+
+        $scope.codes = [{code:'sz399006',name:'cy'},
+        {code:'sz399001',name:'sc'},
+        {code:'sz399678',name:'cx'},
+        {code:'sz399959',name:'jg'},
+        {code:'sz399991',name:'ydyl'},
+        {code:'sz399232',name:'ck'},
+        {code:'sz399240',name:'jr'},
+        {code:'sz399806',name:'hj'},
+        {code:'sz399239',name:'it'}];
+        $scope.code = $scope.codes[0].code;
         var oldData = [];
         var code = 'sz399006';
 
@@ -994,11 +1004,13 @@ angular.module('starter.controllers', ['ngTable'])
                 color: 'white'
             }]
         };
-        var maxColumn = 0;
+        
 
         var isPlay = false;
         var sellNotification = false;
+
         var r = 0;
+        var maxColumn = 0;
         var chart = null;
 
         var initChart = function(){
@@ -1192,7 +1204,6 @@ angular.module('starter.controllers', ['ngTable'])
                         },
                         tickAmount: 1,
                         max: 2*maxColumn,
-                        //tickInterval: 300,
                         opposite: false
                     }, {
                         labels: {
