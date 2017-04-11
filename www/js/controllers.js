@@ -1136,9 +1136,9 @@ angular.module('starter.controllers', ['ngTable'])
                                     append = last[1];
                                 }
                                 gt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
-                                if (gt[gt.length - 1][1] > 3.5) {
+                                if (gt[gt.length - 1][1] > 4) {
                                     arr[3].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
-                                } else if (gt[gt.length - 1][1] > 2.5) {
+                                } else if (gt[gt.length - 1][1] > 3) {
                                     arr[5].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
                                 }
                             }
@@ -1152,9 +1152,9 @@ angular.module('starter.controllers', ['ngTable'])
                                     append = last[1];
                                 }
                                 lt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
-                                if (lt[lt.length - 1][1] < -3.5) {
+                                if (lt[lt.length - 1][1] < -4) {
                                     arr[4].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
-                                } else if (lt[lt.length - 1][1] < -2.5) {
+                                } else if (lt[lt.length - 1][1] < -3) {
                                     arr[6].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
                                 }
                             }
@@ -1301,6 +1301,11 @@ angular.module('starter.controllers', ['ngTable'])
                                 enabled: true,
                                 series: {
                                     data: arr[1]
+                                },
+                                xAxis: {
+                                    labels: {
+                                        format: '{value:%Y-%m-%d %H:%M}'
+                                    }
                                 }
                             },
                             credits: {
@@ -1339,5 +1344,7 @@ angular.module('starter.controllers', ['ngTable'])
         initChart();
         calPopular(n, t, code);
         //calPopular(n, t, code);
-        $rootScope.loop = $interval(function (){ calPopular(n, t, code) }, 10000);
+        $rootScope.loop = $interval(function (){ 
+            calPopular(n, t, code) 
+        }, 10000);
     });
