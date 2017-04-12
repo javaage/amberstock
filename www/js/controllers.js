@@ -1030,18 +1030,26 @@ angular.module('starter.controllers', ['ngTable'])
             initChart();
             n = parseInt(day);
             calPopular(n, 0, code);
+            $rootScope.loop = $interval(function (){ 
+                calPopular(n, t, code) 
+            }, 10000);
         }
 
         $scope.changeCode = function(c){
             code = c;
             initChart();
             calPopular(n, 0, code);
+            $rootScope.loop = $interval(function (){ 
+                calPopular(n, t, code) 
+            }, 10000);
         }
 
         $scope.stopSound = function(){
             initChart();
             calPopular(n, 0, code);
-
+            $rootScope.loop = $interval(function (){ 
+                calPopular(n, t, code) 
+            }, 10000);
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
@@ -1301,11 +1309,6 @@ angular.module('starter.controllers', ['ngTable'])
                                 enabled: true,
                                 series: {
                                     data: arr[1]
-                                },
-                                xAxis: {
-                                    labels: {
-                                        format: '{value:%Y-%m-%d %H:%M}'
-                                    }
                                 }
                             },
                             credits: {
@@ -1313,6 +1316,9 @@ angular.module('starter.controllers', ['ngTable'])
                             },
                             scrollbar: {
                                 enabled: true
+                            },
+                            tooltip: {
+                                xDateFormat: '%Y-%m-%d %H:%M',
                             },
                             yAxis: yAxis,
                             series: series
@@ -1343,7 +1349,6 @@ angular.module('starter.controllers', ['ngTable'])
 
         initChart();
         calPopular(n, t, code);
-        //calPopular(n, t, code);
         $rootScope.loop = $interval(function (){ 
             calPopular(n, t, code) 
         }, 10000);
