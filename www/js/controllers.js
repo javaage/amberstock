@@ -1343,7 +1343,6 @@ angular.module('starter.controllers', ['ngTable'])
                 })
                 .error(function(error){
                     console.log(error);
-                    initChart();
                 });
         };
 
