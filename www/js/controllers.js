@@ -90,7 +90,9 @@ angular.module('starter.controllers', ['ngTable'])
             .success(function (data) {
                 $scope.socketUrl = data;
                 $scope.initWebSocket();
-                $interval(function (){ $scope.initWebSocket() }, 10000);
+                $interval(function (){ 
+                    $scope.initWebSocket();   
+                }, 10000);
             });
         };
 
@@ -544,7 +546,21 @@ angular.module('starter.controllers', ['ngTable'])
             $scope.url = "https://ichess.sinaapp.com/ctrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
-    }).controller('MyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $interval) {
+    }).controller('MyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $interval, $state) {
+        var inArray = function( elem, array ) {
+            if ( array.indexOf ) {
+                return array.indexOf( elem );
+            }
+
+            for ( var i = 0, length = array.length; i < length; i++ ) {
+                if ( array[ i ] === elem ) {
+                    return i;
+                }
+            }
+
+            return -1;
+        };
+
         $scope.changeTab = function(trans){
             switch(trans)
             {
@@ -579,9 +595,27 @@ angular.module('starter.controllers', ['ngTable'])
                 var charts = [];
 
                 $scope.createChart = function (container, seriesOptions, name) {
+                    var times = [];
+
+                    for (var v in seriesOptions) {
+                        if (seriesOptions[v].name == container) {
+                            for(var i in seriesOptions[v].data){
+                                times.push(seriesOptions[v].data[i][0]);
+                            }
+                        }
+                    }
+
                     for (var v in seriesOptions) {
                         if (seriesOptions[v].name == 'sh000001') {
                             seriesOptions[v].yAxis = 0;
+                            var newData = [];
+                            for(var i in seriesOptions[v].data){
+                                if(true){ //inArray(seriesOptions[v].data[i][0],times)>-1
+                                    newData = seriesOptions[v].data[i];
+                                }
+                            }
+                            seriesOptions[v].data = newData;
+
                         } else {
                             seriesOptions[v].yAxis = 1;
                         }
@@ -664,7 +698,10 @@ angular.module('starter.controllers', ['ngTable'])
 
                 getHolder();
 
-                $rootScope.loop = $interval(function (){ getHolder() }, 10000);
+                $rootScope.loop = $interval(function (){ 
+                    if($state.current.name=='app.my.waveHolder')
+                        getHolder();
+                }, 10000);
                 break;
             case 'waveAttend':
                 var codes = 'sz002594,sh601390';
@@ -685,9 +722,27 @@ angular.module('starter.controllers', ['ngTable'])
                         opposite: true
                     }];
 
+                    var times = [];
+
+                    for (var v in seriesOptions) {
+                        if (seriesOptions[v].name == container) {
+                            for(var i in seriesOptions[v].data){
+                                times.push(seriesOptions[v].data[i][0]);
+                            }
+                        }
+                    }
+
                     for (var v in seriesOptions) {
                         if (seriesOptions[v].name == 'sh000001') {
                             seriesOptions[v].yAxis = 0;
+                            var newData = [];
+                            for(var i in seriesOptions[v].data){
+                                if(true){ //inArray(seriesOptions[v].data[i][0],times)>-1
+                                    newData = seriesOptions[v].data[i];
+                                }
+                            }
+                            seriesOptions[v].data = newData;
+
                         } else {
                             seriesOptions[v].yAxis = 1;
                         }
@@ -770,7 +825,10 @@ angular.module('starter.controllers', ['ngTable'])
 
                 getAttend();
 
-                $rootScope.loop = $interval(function (){ getAttend() }, 10000);
+                $rootScope.loop = $interval(function (){
+                    if($state.current.name=='app.my.waveAttend') 
+                        getAttend();
+                }, 10000);
                 break;
             default:
                 console.log('default');
@@ -970,7 +1028,7 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('WaveAttendCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
         
         
-    }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, NgTableParams) {
+    }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
 
         $scope.days = [1,5,20,100];
 
@@ -1030,8 +1088,9 @@ angular.module('starter.controllers', ['ngTable'])
             initChart();
             n = parseInt(day);
             calPopular(n, 0, code);
-            $rootScope.loop = $interval(function (){ 
-                calPopular(n, t, code) 
+            $rootScope.loop = $interval(function (){
+                if($state.current.name=='app.popular') 
+                    calPopular(n, t, code); 
             }, 10000);
         }
 
@@ -1040,15 +1099,17 @@ angular.module('starter.controllers', ['ngTable'])
             initChart();
             calPopular(n, 0, code);
             $rootScope.loop = $interval(function (){ 
-                calPopular(n, t, code) 
+                if($state.current.name=='app.popular')
+                    calPopular(n, t, code);
             }, 10000);
         }
 
         $scope.stopSound = function(){
             initChart();
             calPopular(n, 0, code);
-            $rootScope.loop = $interval(function (){ 
-                calPopular(n, t, code) 
+            $rootScope.loop = $interval(function (){
+                if($state.current.name=='app.popular') 
+                    calPopular(n, t, code); 
             }, 10000);
             if($scope.player)
                 $scope.player.pause();
@@ -1348,7 +1409,8 @@ angular.module('starter.controllers', ['ngTable'])
 
         initChart();
         calPopular(n, t, code);
-        $rootScope.loop = $interval(function (){ 
-            calPopular(n, t, code) 
+        $rootScope.loop = $interval(function (){
+            if($state.current.name=='app.popular') 
+                calPopular(n, t, code); 
         }, 10000);
     });
