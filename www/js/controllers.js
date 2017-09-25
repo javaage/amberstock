@@ -1091,7 +1091,7 @@ angular.module('starter.controllers', ['ngTable'])
             $rootScope.loop = $interval(function (){
                 if($state.current.name=='app.popular') 
                     calPopular(n, t, code); 
-            }, 10000);
+            }, 30000);
         }
 
         $scope.changeCode = function(c){
@@ -1101,7 +1101,7 @@ angular.module('starter.controllers', ['ngTable'])
             $rootScope.loop = $interval(function (){ 
                 if($state.current.name=='app.popular')
                     calPopular(n, t, code);
-            }, 10000);
+            }, 30000);
         }
 
         $scope.stopSound = function(){
@@ -1110,7 +1110,7 @@ angular.module('starter.controllers', ['ngTable'])
             $rootScope.loop = $interval(function (){
                 if($state.current.name=='app.popular') 
                     calPopular(n, t, code); 
-            }, 10000);
+            }, 30000);
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
@@ -1127,7 +1127,7 @@ angular.module('starter.controllers', ['ngTable'])
                     code: code
                 };
 
-            $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p))
+            $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p),{timeout: 20000})
                 .success(function (data) {
                     console.log(data);
                     
@@ -1412,5 +1412,5 @@ angular.module('starter.controllers', ['ngTable'])
         $rootScope.loop = $interval(function (){
             if($state.current.name=='app.popular') 
                 calPopular(n, t, code); 
-        }, 10000);
+        }, 30000);
     });
