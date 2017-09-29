@@ -28,6 +28,7 @@
                     {{stock.gate | number:3}}</td>
                 <td title="'操作'">
                     <button type="button" class="btn btn-primary" ng-click="deleteAttend('{{stock.code}}')">Delete</button>
+                    <input type="checkbox" ng-model="stock.checked" ng-click="updateAttend($data)"><span>Inspect</span>
                 </td>
             </tr>
         </table>

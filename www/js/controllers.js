@@ -274,6 +274,18 @@ angular.module('starter.controllers', ['ngTable'])
                         if(item.trans){
                             item.trans = parseFloat(item.trans);
                         }
+                        if(item.signal){
+                            item.signal = parseInt(item.signal);
+                        }
+                        if(item.current){
+                            item.current = parseFloat(item.current);
+                        }
+                        if(item.level){
+                            item.level = parseFloat(item.level);
+                        }
+                        if(item.price){
+                            item.price = parseFloat(item.price);
+                        }
                     }
 
                     $scope.tableParams = new NgTableParams(
@@ -565,19 +577,224 @@ angular.module('starter.controllers', ['ngTable'])
             switch(trans)
             {
             case 'holder':
-                $scope.url = "https://ichess.sinaapp.com/holder.php";
-                $scope.getCounter($scope.url,$scope);  
                 break;
             case 'attend':
-                $scope.url = "https://ichess.sinaapp.com/attend.php";
-                $scope.getCounter($scope.url,$scope);
+
                 break;
             case 'weak':
-                $scope.url = "https://ichess.sinaapp.com/weak.php";
-                $scope.getCounter($scope.url,$scope);
+                
                 break;
             case 'waveHolder':
-                var codes = 'sz002594,sh601390';
+                
+                break;
+            case 'waveAttend':
+                
+                break;
+            default:
+                console.log('default');
+            }
+        };
+
+    }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.search = {};
+        $scope.url = "https://ichess.sinaapp.com/holder.php";
+        $scope.getCounter($scope.url,$scope);
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addHolder = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/holder.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                });
+        };
+        $scope.deleteHolder = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                    alert('delete successfully.');
+            });
+        };
+    }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        
+        $scope.search = {};
+
+        $scope.url = "https://ichess.sinaapp.com/attend.php";
+        $scope.getCounter($scope.url,$scope);
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addAttend = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                });
+        };
+
+        $scope.deleteAll = function(){
+
+            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                });
+        };
+        $scope.deleteAttend = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                    alert('delete successfully.');
+                });
+        };
+
+        $scope.updateAttend = function(data){
+            $rootScope.attendList = [];
+            angular.forEach(data, function (item, index) {
+                var i = 5;
+                if(item.checked){
+                    $rootScope.attendList.push(item);
+                }
+            });
+        };
+    }).controller('WeakCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
+        $scope.search = {};
+
+        $scope.url = "https://ichess.sinaapp.com/weak.php";
+        $scope.getCounter($scope.url,$scope);
+        
+        $scope.searchStock = function(q){
+            if(q.trim()==''){
+                $scope.searchStocks=[];
+                return;
+            }
+            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            $http.get(urlSearch)
+                .success(function (data) {
+                    $scope.searchStocks = data;
+                });
+        };
+
+        $scope.selectCode = function(code){
+            $scope.search.sc = code;
+            $scope.searchStocks = [];
+        };
+
+        $scope.addWeak = function(code){
+
+            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=a&c=" + code;
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                });
+        };
+
+        $scope.deleteAll = function(){
+
+            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=d";
+            $http.get(urlAdd)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                });
+        };
+        $scope.deleteAttend = function(code){
+            var urlDetete = "https://ichess.sinaapp.com/weak.php?a=d&c=" + code;
+            $http.get(urlDetete)
+                .success(function (data) {
+                    $scope.getCounter($scope.url,$scope);
+                    alert('delete successfully.');
+                });
+        };
+    })
+    .controller('ChartCtrl', function ($rootScope,$scope,$interval) {
+        
+        var chart = new Highcharts.stockChart({
+            chart: {
+                renderTo: 'popular',
+                type: 'area'
+            },
+            title: {
+                text: 'Monthly Average Temperature'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Tokyo',
+                data: [[100,7.0], [120,6.9]]
+            }, {
+                name: 'London',
+                data: [[100,5.0], [120,16.9]]
+            }]
+        });
+
+        function addPoint(){
+             chart.series[0].addPoint([150,10],false);
+             chart.series[1].addPoint([150,20],false);
+            //chart.series[0].setData([[100,7.0], [120,6.9],[150,10]],false);
+            chart.redraw();
+        }
+        
+        //$interval(addPoint,10000);
+        // cordova.plugins.notification.local.schedule({
+        //     title: "New Message",
+        //     message: "Hi, are you ready? We are waiting.",
+        //     sound: "file://wave/buy.mp3",
+        //     icon: "file://img/ionic.png"
+        // });
+        
+
+    }).controller('WaveHolderCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, $state, NgTableParams) {
+        var codes = 'sz002594,sh601390';
                 var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
                 
                 var yAxis = [{
@@ -701,10 +918,10 @@ angular.module('starter.controllers', ['ngTable'])
                 $rootScope.loop = $interval(function (){ 
                     if($state.current.name=='app.my.waveHolder')
                         getHolder();
-                }, 10000);
-                break;
-            case 'waveAttend':
-                var codes = 'sz002594,sh601390';
+                }, 60000);
+        
+    }).controller('WaveAttendCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, $state, NgTableParams) {
+        var codes = 'sz002594,sh601390';
                 var lt = (new Date()).getTime() - 24 * 60 * 60 * 1000;
 
                 var charts = [];
@@ -799,234 +1016,51 @@ angular.module('starter.controllers', ['ngTable'])
                     $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
                         .success(function (data) {
                             console.log(data);
-
-                            var lst = data[0]['data'];
-                            if (lst && lst.length > 0) {
-                                lt = lst[lst.length - 1][0];
+                            if(data[0]){
+                                var lst = data[0]['data'];
+                                if (lst && lst.length > 0) {
+                                    lt = lst[lst.length - 1][0];
+                                }
+                                $scope.createChart(code, data, name);
                             }
-                            $scope.createChart(code, data, name);
+                            
                     });
                 };
                 var getAttend = function () {
-                    var url = 'https://ichess.sinaapp.com/attend.php';
-                    $http.get(url)
-                        .success(function (data) {
-                            for (var i in data) {
-                                var item = data[i];
-                                var code = item.code.toLowerCase();
-                                $('#attend').append('<div id="' + code + '"></div>');
-                                $scope.getindex(code,item.name);
-                            }
-                        })
-                        .finally(function() {
-                            $scope.$broadcast('scroll.refreshComplete');
-                        });
+                    // var url = 'https://ichess.sinaapp.com/attend.php';
+                    // $http.get(url)
+                    //     .success(function (data) {
+                    //         for (var i in data) {
+                    //             var item = data[i];
+                    //             var code = item.code.toLowerCase();
+                    //             $('#attend').append('<div id="' + code + '"></div>');
+                    //             $scope.getindex(code,item.name);
+                    //         }
+                    //     })
+                    //     .finally(function() {
+                    //         $scope.$broadcast('scroll.refreshComplete');
+                    //     });
+
+                    for (var i in $rootScope.attendList) {
+                        var item = $rootScope.attendList[i];
+                        var code = item.code.toLowerCase();
+                        $('#attend').append('<div id="' + code + '"></div>');
+                        $scope.getindex(code,item.name);
+                    }
                 };
+
+                // for (var i in $rootScope.attendList) {
+                //     var item = $rootScope.attendList[i];
+                //     var code = item.code.toLowerCase();
+                //     $('#attend').append('<div id="' + code + '"></div>');
+                // }
 
                 getAttend();
 
                 $rootScope.loop = $interval(function (){
                     if($state.current.name=='app.my.waveAttend') 
                         getAttend();
-                }, 10000);
-                break;
-            default:
-                console.log('default');
-            }
-        };
-
-    }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.search = {};
-        $scope.url = "https://ichess.sinaapp.com/holder.php";
-        $scope.getCounter($scope.url,$scope);
-        
-        $scope.searchStock = function(q){
-            if(q.trim()==''){
-                $scope.searchStocks=[];
-                return;
-            }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
-            $http.get(urlSearch)
-                .success(function (data) {
-                    $scope.searchStocks = data;
-                });
-        };
-
-        $scope.selectCode = function(code){
-            $scope.search.sc = code;
-            $scope.searchStocks = [];
-        };
-
-        $scope.addHolder = function(code){
-
-            var urlAdd = "https://ichess.sinaapp.com/holder.php?a=a&c=" + code;
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                });
-        };
-        $scope.deleteHolder = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
-            $http.get(urlDetete)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
-            });
-        };
-    }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.search = {};
-
-        $scope.url = "https://ichess.sinaapp.com/attend.php";
-        $scope.getCounter($scope.url,$scope);
-        
-        $scope.searchStock = function(q){
-            if(q.trim()==''){
-                $scope.searchStocks=[];
-                return;
-            }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
-            $http.get(urlSearch)
-                .success(function (data) {
-                    $scope.searchStocks = data;
-                });
-        };
-
-        $scope.selectCode = function(code){
-            $scope.search.sc = code;
-            $scope.searchStocks = [];
-        };
-
-        $scope.addAttend = function(code){
-
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                });
-        };
-
-        $scope.deleteAll = function(){
-
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                });
-        };
-        $scope.deleteAttend = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
-            $http.get(urlDetete)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
-                });
-        };
-    }).controller('WeakCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.search = {};
-
-        $scope.url = "https://ichess.sinaapp.com/weak.php";
-        $scope.getCounter($scope.url,$scope);
-        
-        $scope.searchStock = function(q){
-            if(q.trim()==''){
-                $scope.searchStocks=[];
-                return;
-            }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
-            $http.get(urlSearch)
-                .success(function (data) {
-                    $scope.searchStocks = data;
-                });
-        };
-
-        $scope.selectCode = function(code){
-            $scope.search.sc = code;
-            $scope.searchStocks = [];
-        };
-
-        $scope.addWeak = function(code){
-
-            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=a&c=" + code;
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                });
-        };
-
-        $scope.deleteAll = function(){
-
-            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=d";
-            $http.get(urlAdd)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                });
-        };
-        $scope.deleteAttend = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/weak.php?a=d&c=" + code;
-            $http.get(urlDetete)
-                .success(function (data) {
-                    $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
-                });
-        };
-    })
-    .controller('ChartCtrl', function ($rootScope,$scope,$interval) {
-        
-        var chart = new Highcharts.stockChart({
-            chart: {
-                renderTo: 'popular',
-                type: 'area'
-            },
-            title: {
-                text: 'Monthly Average Temperature'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
-                }
-            },
-            series: [{
-                name: 'Tokyo',
-                data: [[100,7.0], [120,6.9]]
-            }, {
-                name: 'London',
-                data: [[100,5.0], [120,16.9]]
-            }]
-        });
-
-        function addPoint(){
-             chart.series[0].addPoint([150,10],false);
-             chart.series[1].addPoint([150,20],false);
-            //chart.series[0].setData([[100,7.0], [120,6.9],[150,10]],false);
-            chart.redraw();
-        }
-        
-        //$interval(addPoint,10000);
-        // cordova.plugins.notification.local.schedule({
-        //     title: "New Message",
-        //     message: "Hi, are you ready? We are waiting.",
-        //     sound: "file://wave/buy.mp3",
-        //     icon: "file://img/ionic.png"
-        // });
-        
-
-    }).controller('WaveHolderCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
-        
-        
-    }).controller('WaveAttendCtrl', function ($rootScope,$scope, $http, $ionicModal,$interval, NgTableParams) {
-        
+                }, 60000);
         
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
 
