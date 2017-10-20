@@ -26,6 +26,12 @@
                     {{stock.rate | number:3}}</td>
                 <td title="'gate'" sortable="'gate'">
                     {{stock.gate | number:3}}</td>
+                <td title="'asc'" sortable="'ascrate'">
+                    {{stock.ascrate | number:3}}</td>
+                <td title="'desc'" sortable="'descrate'">
+                    {{stock.descrate | number:3}}</td>
+                <td title="'equal'" sortable="'equalrate'">
+                    {{stock.equalrate | number:3}}</td>
                 <td title="'操作'">
                     <button type="button" class="btn btn-primary" ng-click="deleteWeak('{{stock.code}}')">Delete</button>
                 </td>
