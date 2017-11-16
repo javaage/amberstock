@@ -1064,8 +1064,9 @@ angular.module('starter.controllers', ['ngTable'])
         
     }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
 
-        $scope.days = [1,5,20,100];
+        $scope.days = [1,5,20,100,500,5000];
 
+        
         $scope.codes = [{code:'sz399006',name:'cy'},
         {code:'sz399001',name:'sc'},
         {code:'sz399678',name:'cx'},
@@ -1074,7 +1075,25 @@ angular.module('starter.controllers', ['ngTable'])
         {code:'sz399232',name:'ck'},
         {code:'sz399240',name:'jr'},
         {code:'sz399806',name:'hj'},
-        {code:'sz399239',name:'it'}];
+        {code:'sz399239',name:'it'},
+        {code:'sz399803',name:'gy4.0'},
+        {code:'sz399417',name:'xnyc'},
+        {code:'sz399441',name:'swyy'},
+        {code:'sz399807',name:'gtcy'},
+        {code:'sz399814',name:'dny'},
+        {code:'sz399998',name:'mt'},
+        {code:'sz399997',name:'bj'},
+        {code:'sz399996',name:'znjj'},
+        {code:'sz399995',name:'jjgc'},
+        {code:'sz399994',name:'xxaq'},
+        {code:'sz399989',name:'zzyl'},
+        {code:'sz399986',name:'zzyh'},
+        {code:'sz399975',name:'zqgs'},
+        {code:'sz399971',name:'cm'},
+        {code:'sz399970',name:'ydhl'},
+        {code:'sz399812',name:'ylcy'},
+        {code:'sz399809',name:'bxzt'}];
+
         $scope.code = $scope.codes[0].code;
         var oldData = [];
         var code = 'sz399006';
