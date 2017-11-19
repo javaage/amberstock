@@ -137,6 +137,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngSanit
           }
         }
       })
+      .state('app.collect', {
+        url: '/collect',
+        cache: false,
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/collect.html?t=' + Math.floor(Date.now() / 1000),
+            controller: 'CollectCtrl'
+          }
+        }
+      })
       .state('app.tab', {
         url: '/tab',
         abstract: true,

@@ -1289,38 +1289,6 @@ angular.module('starter.controllers', ['ngTable'])
                         }
                     }
 
-                    // if (typeof (arr[3][arr[3].length - 1]) == "object" && (new Date()).getTime() - arr[3][arr[3].length - 1][0] < 5 * 60 * 1000  && !isPlay) { //buy
-                    //     console.log("buy");
-                    //     if($scope.player)
-                    //         $scope.player.pause();
-                    //     isPlay = true;
-                    //     $scope.player = document.getElementById('buymp3');
-                    //     $scope.player.play();
-                    // } else if (typeof (arr[4][arr[4].length - 1]) == "object" && (new Date()).getTime() - arr[4][arr[4].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //sell
-                    //     console.log("sell");
-                    //     if($scope.player)
-                    //         $scope.player.pause();
-                    //     isPlay = true;
-                    //     $scope.player = document.getElementById('sellmp3');
-                    //     $scope.player.play();
-                    // } else if (typeof (arr[5][arr[5].length - 1]) == "object" && (new Date()).getTime() - arr[5][arr[5].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre buy
-                    //     console.log("pre buy");
-                    //     if($scope.player)
-                    //         $scope.player.pause();
-                    //     isPlay = true;
-                    //     $scope.player = document.getElementById('pbuymp3');
-                    //     $scope.player.play();
-                    // } else if (typeof (arr[6][arr[6].length - 1]) == "object" && (new Date()).getTime() - arr[6][arr[6].length - 1][0] < 5 * 60 * 1000 && !isPlay) { //pre sell
-                    //     console.log("pre sell");
-                    //     if($scope.player)
-                    //         $scope.player.pause();
-                    //     isPlay = true;
-                    //     $scope.player = document.getElementById('psellmp3');
-                    //     $scope.player.play();
-                    // } else {
-                    //     isPlay = false;
-                    // }
-
                     maxValue += 1;
                     minValue -= 1;
 
@@ -1466,4 +1434,332 @@ angular.module('starter.controllers', ['ngTable'])
             if($state.current.name=='app.popular') 
                 calPopular(n, t, code); 
         }, 30000);
+    }).controller('CollectCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
+
+        $scope.days = [1,5,20,100,500,5000];
+
+        var codeIndex = 0;
+        
+        $scope.codes = [{code:'sz399006',name:'cy',fullName:'创业'},
+        {code:'sz399001',name:'sc',fullName:'深证'},
+        {code:'sz399678',name:'cx',fullName:'次新'},
+        {code:'sz399959',name:'jg',fullName:'军工'},
+        {code:'sz399991',name:'ydyl',fullName:'一带一路'},
+        {code:'sz399232',name:'ck',fullName:'采矿'},
+        {code:'sz399240',name:'jr',fullName:'金融'},
+        {code:'sz399806',name:'hj',fullName:'环境'},
+        {code:'sz399239',name:'it',fullName:'it'},
+        {code:'sz399803',name:'gy4.0',fullName:'工业4.0'},
+        {code:'sz399417',name:'xnyc',fullName:'新能源车'},
+        {code:'sz399441',name:'swyy',fullName:'生物医药'},
+        {code:'sz399807',name:'gtcy',fullName:'高铁'},
+        {code:'sz399814',name:'dny',fullName:'大农业'},
+        {code:'sz399998',name:'mt',fullName:'煤炭'},
+        {code:'sz399997',name:'bj',fullName:'白酒'},
+        {code:'sz399996',name:'znjj',fullName:'家居'},
+        {code:'sz399995',name:'jjgc',fullName:'基建'},
+        {code:'sz399994',name:'xxaq',fullName:'信息安全'},
+        {code:'sz399989',name:'zzyl',fullName:'医疗'},
+        {code:'sz399986',name:'zzyh',fullName:'银行'},
+        {code:'sz399975',name:'zqgs',fullName:'证券'},
+        {code:'sz399971',name:'cm',fullName:'传媒'},
+        {code:'sz399970',name:'ydhl',fullName:'移动互联'},
+        {code:'sz399812',name:'ylcy',fullName:'养老产业'},
+        {code:'sz399809',name:'bxzt',fullName:'保险'}];
+
+        $scope.code = $scope.codes[0].code;
+        
+        var n = 1;
+        var t = 0;
+        var maxColumn = 0;
+
+        var background = {
+            type: 'linearGradient',
+            x0: 0,
+            y0: 0,
+            x1: 0,
+            y1: 1,
+            colorStops: [{
+                offset: 0,
+                color: '#d2e6c9'
+            }, {
+                offset: 1,
+                color: 'white'
+            }]
+        };
+        
+        var r = 0;
+        var chart = null;
+
+        $scope.changeLevel = function(day){
+            n = parseInt(day);
+            
+            if(codeIndex >= $scope.codes.length){
+                codeIndex = 0;
+                calNextPopular();
+            }else{
+                codeIndex = 0;
+            }
+        };
+
+        var sortTime = function(a, b){
+            return b[0] - a[0];
+        };
+
+        $scope.stopSound = function(){
+            if($scope.player)
+                $scope.player.pause();
+            $scope.$broadcast('scroll.refreshComplete');
+        };
+
+        function calPopular(n, time, code, name) {
+            var p = {
+                    n: n,
+                    t: time,
+                    code: code
+                };
+
+            $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p),{timeout: 20000})
+                .success(function (data) {
+                    console.log(data);
+                    
+                    if(data.length < n)
+                        return;
+
+                    var maxColumn = 0;
+                    var minValue = 100000;
+                    var maxValue = 0;
+                    
+
+                    var arr = [];
+                     arr[0] = [];
+                     arr[1] = [];
+                     arr[2] = [];
+                     arr[3] = [];
+                     arr[4] = [];
+                     arr[5] = [];
+                     arr[6] = [];
+
+                    var gt = [];
+                    var lt = [];
+
+                    var delta = 0;
+
+                    var minP = 100000;
+                    var maxP = 0;
+                    
+                    t = data[data.length-1].t;
+                    var mid = Math.floor(data.length / 2);
+                    delta = data[mid].dex - data[mid].strong;
+
+                    var min = 100000;
+
+                    for (var i = 0; i < data.length; i++) {
+                        arr[2].push([1000 * parseInt(data[i].t), parseFloat(data[i].strong) + delta]);
+                        arr[1].push([1000 * parseInt(data[i].t), parseFloat(data[i].dex)]);
+
+                        if(parseFloat(data[i].dex) > maxValue){
+                            maxValue = parseFloat(data[i].dex);
+                        }
+                        if(parseFloat(data[i].strong) + delta > maxValue){
+                            maxValue = parseFloat(data[i].strong) + delta;
+                        }
+                        if(parseFloat(data[i].dex) < minValue){
+                            minValue = parseFloat(data[i].dex);
+                        }
+                        if(parseFloat(data[i].strong) + delta < minValue){
+                            minValue = parseFloat(data[i].strong) + delta;
+                        }
+
+                        if (parseFloat(data[i].dex) < min)
+                            min = parseFloat(data[i].dex);
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        var cl = Math.round(parseFloat(data[i].clmn)/1000);
+
+                        if(cl > 4000){
+                            cl = maxColumn * 1.1;
+                        }
+                        arr[0].push([1000 * parseInt(data[i].t), cl]);
+
+                        if (cl > maxColumn)
+                            maxColumn = cl;
+                    }
+
+                    for (var i = 1; i < data.length; i++) {
+                        if (i > 1 && arr[1][i][1] < arr[1][i - 1][1]) {
+                            if (arr[2][i][1] > arr[2][i - 1][1]) {
+                                var last = gt[gt.length - 1];
+                                var append = 0;
+                                if (typeof (last) == "object" && last[0] == i - 1) {
+                                    append = last[1];
+                                }
+                                gt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
+                                if (gt[gt.length - 1][1] > 4) {
+                                    arr[3].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
+                                } else if (gt[gt.length - 1][1] > 3) {
+                                    arr[5].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
+                                }
+                            }
+                        }
+
+                        if (i > 1 && arr[1][i][1] > arr[1][i - 1][1]) {
+                            if (arr[2][i][1] < arr[2][i - 1][1]) {
+                                var last = lt[lt.length - 1];
+                                var append = 0;
+                                if (typeof (last) == "object" && last[0] == i - 1) {
+                                    append = last[1];
+                                }
+                                lt.push([i, arr[2][i][1] - arr[2][i - 1][1] + append]);
+                                if (lt[lt.length - 1][1] < -4) {
+                                    arr[4].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
+                                } else if (lt[lt.length - 1][1] < -3) {
+                                    arr[6].push([1000 * parseInt(data[i].t), arr[1][i][1]]);
+                                }
+                            }
+                        }
+                        if(arr[2][i][1] > maxP){
+                            maxP = arr[2][i][1];
+                        }
+                        if(arr[2][i][1] < minP){
+                            minP = arr[2][i][1];
+                        }
+                    }
+
+                    maxValue += 1;
+                    minValue -= 1;
+
+                    var yAxis = [{
+                        labels: {
+                            format: '{value}'
+                        },
+                        tickAmount: 1,
+                        max: 2*maxColumn,
+                        opposite: false
+                    }, {
+                        labels: {
+                            format: '{value}'
+                        },
+                        startOnTick: false,
+                        endOnTick: true,
+                        tickAmount: 8,
+                        max: maxValue,
+                        min: minValue,
+                        opposite: true,
+                        plotLines: [{
+                            value: minP,
+                            color: 'green',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'min'
+                            }
+                        }, {
+                            value: maxP,
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'max'
+                            }
+                        }]
+                    }];
+
+                    for(var i in arr){
+                        arr[i].sort(sortTime);
+                    }
+
+                    var series = [{
+                                name: 'Column',
+                                type: 'area',
+                                yAxis: 0,
+                                color: Highcharts.defaultOptions.colors[0],
+                                data: arr[0]
+                            }, {
+                                name: 'Index',
+                                type: 'line',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[1],
+                                data: arr[1]
+                            }, {
+                                name: 'Popular',
+                                type: 'line',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[2],
+                                data: arr[2]
+                            }, {
+                                name: 'Buy point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[5],
+                                data: arr[3]
+                            }, {
+                                name: 'Sell point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[3],
+                                data: arr[4]
+                            }, {
+                                name: 'Pre Buy point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[4],
+                                data: arr[5]
+                            }, {
+                                name: 'Pre Sell point',
+                                type: 'scatter',
+                                yAxis: 1,
+                                color: Highcharts.defaultOptions.colors[6],
+                                data: arr[6]
+                            }];
+
+                    var options = {
+                            chart: {
+                                renderTo: code
+                            },
+                            rangeSelector: {
+                                selected: 1,
+                                enabled: false
+                            },
+                            title: {
+                                text: null
+                            },
+                            navigator: {
+                                enabled: false,
+                                series: {
+                                    data: arr[1]
+                                }
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            scrollbar: {
+                                enabled: false
+                            },
+                            tooltip: {
+                                xDateFormat: name + '<br>' + '%Y-%m-%d %H:%M' ,
+                            },
+                            yAxis: yAxis,
+                            series: series
+                        };
+
+                    chart = new Highcharts.stockChart(options);
+                    calNextPopular();
+                })
+                .error(function(error){
+                    console.log(error);
+                    calNextPopular();
+                });
+        };
+
+        var calNextPopular = function(){
+            if(codeIndex < $scope.codes.length){
+                calPopular(n, 0, $scope.codes[codeIndex].code, $scope.codes[codeIndex].fullName);
+            }
+            codeIndex++;
+            
+        };
+
+        calNextPopular();
+
     });
