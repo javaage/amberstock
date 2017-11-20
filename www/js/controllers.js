@@ -1062,7 +1062,7 @@ angular.module('starter.controllers', ['ngTable'])
                         getAttend();
                 }, 60000);
         
-    }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
+    }).controller('PopularCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, $window, NgTableParams) {
 
         $scope.days = [1,5,20,100,500,5000];
 
@@ -1094,11 +1094,11 @@ angular.module('starter.controllers', ['ngTable'])
         {code:'sz399812',name:'ylcy'},
         {code:'sz399809',name:'bxzt'}];
 
-        $scope.code = $scope.codes[0].code;
+        var code = $scope.code = $window.localStorage['code'] || $scope.codes[0].code;
         var oldData = [];
-        var code = 'sz399006';
 
-        var n = 1;
+        var n = $scope.day = $window.localStorage['n']?  parseInt($window.localStorage['n'])  : 1;
+
         var t = 0;
 
         var background = {
@@ -1140,6 +1140,9 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.changeLevel = function(day){
             initChart();
             n = parseInt(day);
+
+            $window.localStorage['n'] = n;
+
             calPopular(n, 0, code);
             $rootScope.loop = $interval(function (){
                 if($state.current.name=='app.popular') 
@@ -1149,6 +1152,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.changeCode = function(c){
             code = c;
+            $window.localStorage['code'] = code;
             initChart();
             calPopular(n, 0, code);
             $rootScope.loop = $interval(function (){ 
@@ -1434,7 +1438,7 @@ angular.module('starter.controllers', ['ngTable'])
             if($state.current.name=='app.popular') 
                 calPopular(n, t, code); 
         }, 30000);
-    }).controller('CollectCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, NgTableParams) {
+    }).controller('CollectCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, $window, NgTableParams) {
 
         $scope.days = [1,5,20,100,500,5000];
 
@@ -1466,10 +1470,8 @@ angular.module('starter.controllers', ['ngTable'])
         {code:'sz399970',name:'ydhl',fullName:'移动互联'},
         {code:'sz399812',name:'ylcy',fullName:'养老产业'},
         {code:'sz399809',name:'bxzt',fullName:'保险'}];
-
-        $scope.code = $scope.codes[0].code;
         
-        var n = 1;
+        var n = $scope.day = $window.localStorage['n']?  parseInt($window.localStorage['n'])  : 1;
         var t = 0;
         var maxColumn = 0;
 
@@ -1493,7 +1495,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.changeLevel = function(day){
             n = parseInt(day);
-            
+            $window.localStorage['n'] = n;
             if(codeIndex >= $scope.codes.length){
                 codeIndex = 0;
                 calNextPopular();
@@ -1667,6 +1669,42 @@ angular.module('starter.controllers', ['ngTable'])
 
                     for(var i in arr){
                         arr[i].sort(sortTime);
+                    }
+
+                    var indexGreater = true,indexLesser = true, popularGreater = true, popularLesser = true;
+                    var indexG = 0, indexL = 0, popularG = 0, popularL = 0;
+                    for(var m = arr[1].length - 2; m >=0; m--){
+                        if(arr[1][arr[1].length - 1] >= arr[1][m] && indexGreater){
+                            indexG++;
+                        } else{
+                            indexGreater = false;
+                        }
+
+                        if(arr[1][arr[1].length - 1] <= arr[1][m] && indexLesser){
+                            indexL++;
+                        } else{
+                            indexLesser = false;
+                        }
+
+                        if(!indexGreater && !indexLesser)
+                            break;
+                    }
+
+                    for(var m = arr[2].length - 2; m >=0; m--){
+                        if(arr[2][arr[2].length - 1] >= arr[2][m] && popularGreater){
+                            popularG++;
+                        } else{
+                            popularGreater = false;
+                        }
+
+                        if(arr[2][arr[2].length - 1] <= arr[2][m] && popularLesser){
+                            popularL++;
+                        } else{
+                            popularLesser = false;
+                        }
+
+                        if(!popularGreater && !popularLesser)
+                            break;
                     }
 
                     var series = [{
