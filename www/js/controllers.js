@@ -1067,32 +1067,33 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.days = [1,5,20,100,500,5000];
 
         
-        $scope.codes = [{code:'sz399006',name:'cy'},
-        {code:'sz399001',name:'sc'},
-        {code:'sz399678',name:'cx'},
-        {code:'sz399959',name:'jg'},
-        {code:'sz399991',name:'ydyl'},
-        {code:'sz399232',name:'ck'},
-        {code:'sz399240',name:'jr'},
-        {code:'sz399806',name:'hj'},
-        {code:'sz399239',name:'it'},
-        {code:'sz399803',name:'gy4.0'},
-        {code:'sz399417',name:'xnyc'},
-        {code:'sz399441',name:'swyy'},
-        {code:'sz399807',name:'gtcy'},
-        {code:'sz399814',name:'dny'},
-        {code:'sz399998',name:'mt'},
-        {code:'sz399997',name:'bj'},
-        {code:'sz399996',name:'znjj'},
-        {code:'sz399995',name:'jjgc'},
-        {code:'sz399994',name:'xxaq'},
-        {code:'sz399989',name:'zzyl'},
-        {code:'sz399986',name:'zzyh'},
-        {code:'sz399975',name:'zqgs'},
-        {code:'sz399971',name:'cm'},
-        {code:'sz399970',name:'ydhl'},
-        {code:'sz399812',name:'ylcy'},
-        {code:'sz399809',name:'bxzt'}];
+        $scope.codes = [{code:'sz399006',name:'cy',fullName:'创业'},
+        {code:'sz399678',name:'cx',fullName:'次新'},
+        {code:'sz399001',name:'sc',fullName:'深证'},
+        {code:'sh000016',name:'sz',fullName:'上证'},
+        {code:'sz399807',name:'gtcy',fullName:'高铁'},
+        {code:'sz399991',name:'ydyl',fullName:'一带一路'},
+        {code:'sz399995',name:'jjgc',fullName:'基建'},
+        {code:'sz399959',name:'jg',fullName:'军工'},
+        {code:'sz399239',name:'it',fullName:'it'},
+        {code:'sz399803',name:'gy4.0',fullName:'工业4.0'},
+        {code:'sz399417',name:'xnyc',fullName:'新能源车'},
+        {code:'sz399441',name:'swyy',fullName:'生物医药'},
+        {code:'sz399994',name:'xxaq',fullName:'信息安全'},
+        {code:'sz399970',name:'ydhl',fullName:'移动互联'},
+        {code:'sz399971',name:'cm',fullName:'传媒'},
+        {code:'sz399232',name:'ck',fullName:'采矿'},
+        {code:'sz399998',name:'mt',fullName:'煤炭'},
+        {code:'sz399806',name:'hj',fullName:'环境'},
+        {code:'sz399814',name:'dny',fullName:'大农业'},
+        {code:'sz399989',name:'zzyl',fullName:'医疗'},
+        {code:'sz399997',name:'bj',fullName:'白酒'},
+        {code:'sz399996',name:'znjj',fullName:'家居'},
+        {code:'sz399812',name:'ylcy',fullName:'养老产业'},
+        {code:'sz399240',name:'jr',fullName:'金融'},
+        {code:'sz399986',name:'zzyh',fullName:'银行'},
+        {code:'sz399975',name:'zqgs',fullName:'证券'},
+        {code:'sz399809',name:'bxzt',fullName:'保险'}];
 
         var code = $scope.code = $window.localStorage['code'] || $scope.codes[0].code;
         var oldData = [];
@@ -1176,6 +1177,52 @@ angular.module('starter.controllers', ['ngTable'])
         var sortTime = function(a, b){
             return b[0] - a[0];
         };
+
+        var calStable = function(arr){
+            var arrMax = 0,
+                arrMin = 999999,
+                maxIndex = 1,
+                minIndex = 0;
+            for(var i = 0; i < arr.length; i++){
+                if(arr[i][1] > arrMax){
+                    arrMax = arr[i][1];
+                    maxIndex = i;
+                }
+                if(arr[i][1] < arrMin){
+                    arrMin = arr[i][1];
+                    minIndex = i;
+                }
+            }
+            if(arrMax-arrMin > 15* Math.sqrt(n)) 
+                return null;
+            else{
+                return [arr.length/(arrMax-arrMin),arrMin.toFixed(1),arrMax.toFixed(1),minIndex,maxIndex];
+            } 
+                
+        };
+
+        var buyIndex = function(arr1,arr){
+            //var buyIndex = [arr[0][0],0];
+            var buyIndex = [];
+            for(var ind = 1; ind < arr.length; ind++){
+                var arrMax = 0,
+                    arrMin = 999999,
+                    maxIndex = 1,
+                    minIndex = 0;
+                for(var i = Math.max(0,ind-90); i < ind; i++){
+                    if(arr[i][1] > arrMax){
+                        arrMax = arr[i][1];
+                        maxIndex = i;
+                    }
+                    if(arr[i][1] < arrMin){
+                        arrMin = arr[i][1];
+                        minIndex = i;
+                    }
+                }
+                buyIndex.push([arr[ind][0],  arr[ind][1] - arrMin + arr1[minIndex][1] - arr1[ind][1]]);
+            }
+            return buyIndex;
+        }
 
         function calPopular(n, time, code) {
             var p = {
@@ -1293,9 +1340,75 @@ angular.module('starter.controllers', ['ngTable'])
                         }
                     }
 
+                    //arr[2]
+                    var maxStable = [0,0,0,0,0];
+                    var arrClone = arr[2].slice();
+
+                    for(var i = 0; i < arr[2].length-30; i++){
+                        var stable = calStable(arrClone);
+                        if(stable!=null && stable[0] > maxStable[0] ){
+                            maxStable = stable;
+                        }
+                        arrClone.shift();
+                    };
+
+                    if($window.localStorage[code + 'stable' + n]){
+                        var oldStable = JSON.parse($window.localStorage[code + 'stable' + n]);
+
+                        if(oldStable && (oldStable[1] != maxStable[1] || oldStable[2] != maxStable[2])){
+                            var p = {
+                                title: 'Stable is changing!',
+                                content: 'min: ' +  (maxStable[1]-oldStable[1]) + '\r\n' + 'max: ' + maxStable[2] - oldStable[2]
+                            };
+
+                            $http.get('https://ichess.sinaapp.com/ext/sendMail.php?' + $.param(p),{timeout: 20000})
+                            .success(function (data) {
+                                console.log(data);
+                            });
+                        }
+
+                        $window.localStorage[code + 'stable' + n] = JSON.stringify([arr.length/(maxStable[2]-maxStable[1]),maxStable[1],maxStable[2]]);
+                    }
+                
+
                     maxValue += 1;
                     minValue -= 1;
 
+                    var plotLines = [{
+                            value: minP,
+                            color: 'green',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'min ' + (maxP - minP).toFixed(1)
+                            }
+                        }, {
+                            value: maxP,
+                            color: 'green',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'max ' + (maxP - minP).toFixed(1)
+                            }
+                        }, {
+                            value: maxStable[1],
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'stable ' + (maxStable[2] - maxStable[1]).toFixed(1),
+                                align: 'right'
+                            }
+                        }, {
+                            value: maxStable[2],
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'stable ' + (maxStable[2] - maxStable[1]).toFixed(1),
+                                align: 'right'
+                            }
+                        }];
                     var yAxis = [{
                         labels: {
                             format: '{value}'
@@ -1313,25 +1426,11 @@ angular.module('starter.controllers', ['ngTable'])
                         max: maxValue,
                         min: minValue,
                         opposite: true,
-                        plotLines: [{
-                            value: minP,
-                            color: 'green',
-                            dashStyle: 'shortdash',
-                            width: 2,
-                            label: {
-                                text: 'min'
-                            }
-                        }, {
-                            value: maxP,
-                            color: 'red',
-                            dashStyle: 'shortdash',
-                            width: 2,
-                            label: {
-                                text: 'max'
-                            }
-                        }]
+                        plotLines: plotLines
                     }];
 
+                    var buyArr = buyIndex(arr[1],arr[2]) ;
+                    buyArr.sort(sortTime);
                     for(var i in arr){
                         arr[i].sort(sortTime);
                     }
@@ -1394,7 +1493,7 @@ angular.module('starter.controllers', ['ngTable'])
                             navigator: {
                                 enabled: true,
                                 series: {
-                                    data: arr[1]
+                                    data: buyArr
                                 }
                             },
                             credits: {
@@ -1418,8 +1517,16 @@ angular.module('starter.controllers', ['ngTable'])
                         chart.yAxis[0].isDirty = true;
                         chart.yAxis[1].min = minValue;
                         chart.yAxis[1].max = maxValue;
+                        chart.yAxis[1].removePlotLine();
+                        for(var i in plotLines){
+                            chart.yAxis[1].addPlotLine(plotLines[i]);
+                        }
+                        //chart.yAxis[1].addPlotLine(plotLines);
+                        //chart.yAxis[1].plotLines = plotLines;
                         chart.yAxis[1].isDirty = true;
-
+                        // chart.yAxis = yAxis;
+                        // chart.yAxis[0].isDirty = true;
+                        // chart.yAxis[1].isDirty = true;
                         for(var i = 0; i < chart.series.length; i++){
                             chart.series[i].setData(arr[i],false);
                         }
@@ -1445,30 +1552,31 @@ angular.module('starter.controllers', ['ngTable'])
         var codeIndex = 0;
         
         $scope.codes = [{code:'sz399006',name:'cy',fullName:'创业'},
-        {code:'sz399001',name:'sc',fullName:'深证'},
         {code:'sz399678',name:'cx',fullName:'次新'},
-        {code:'sz399959',name:'jg',fullName:'军工'},
+        {code:'sz399001',name:'sc',fullName:'深证'},
+        {code:'sh000016',name:'sz',fullName:'上证'},
+        {code:'sz399807',name:'gtcy',fullName:'高铁'},
         {code:'sz399991',name:'ydyl',fullName:'一带一路'},
-        {code:'sz399232',name:'ck',fullName:'采矿'},
-        {code:'sz399240',name:'jr',fullName:'金融'},
-        {code:'sz399806',name:'hj',fullName:'环境'},
+        {code:'sz399995',name:'jjgc',fullName:'基建'},
+        {code:'sz399959',name:'jg',fullName:'军工'},
         {code:'sz399239',name:'it',fullName:'it'},
         {code:'sz399803',name:'gy4.0',fullName:'工业4.0'},
         {code:'sz399417',name:'xnyc',fullName:'新能源车'},
         {code:'sz399441',name:'swyy',fullName:'生物医药'},
-        {code:'sz399807',name:'gtcy',fullName:'高铁'},
-        {code:'sz399814',name:'dny',fullName:'大农业'},
+        {code:'sz399994',name:'xxaq',fullName:'信息安全'},
+        {code:'sz399970',name:'ydhl',fullName:'移动互联'},
+        {code:'sz399971',name:'cm',fullName:'传媒'},
+        {code:'sz399232',name:'ck',fullName:'采矿'},
         {code:'sz399998',name:'mt',fullName:'煤炭'},
+        {code:'sz399806',name:'hj',fullName:'环境'},
+        {code:'sz399814',name:'dny',fullName:'大农业'},
+        {code:'sz399989',name:'zzyl',fullName:'医疗'},
         {code:'sz399997',name:'bj',fullName:'白酒'},
         {code:'sz399996',name:'znjj',fullName:'家居'},
-        {code:'sz399995',name:'jjgc',fullName:'基建'},
-        {code:'sz399994',name:'xxaq',fullName:'信息安全'},
-        {code:'sz399989',name:'zzyl',fullName:'医疗'},
+        {code:'sz399812',name:'ylcy',fullName:'养老产业'},
+        {code:'sz399240',name:'jr',fullName:'金融'},
         {code:'sz399986',name:'zzyh',fullName:'银行'},
         {code:'sz399975',name:'zqgs',fullName:'证券'},
-        {code:'sz399971',name:'cm',fullName:'传媒'},
-        {code:'sz399970',name:'ydhl',fullName:'移动互联'},
-        {code:'sz399812',name:'ylcy',fullName:'养老产业'},
         {code:'sz399809',name:'bxzt',fullName:'保险'}];
         
         var n = $scope.day = $window.localStorage['n']?  parseInt($window.localStorage['n'])  : 1;
@@ -1512,6 +1620,27 @@ angular.module('starter.controllers', ['ngTable'])
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
+        };
+
+        var calStable = function(arr){
+            var arrMax = 0,
+                arrMin = 999999,
+                maxIndex = 1,
+                minIndex = 0;
+            for(var i = 0; i < arr.length; i++){
+                if(arr[i][1] > arrMax){
+                    arrMax = arr[i][1];
+                    maxIndex = i;
+                }
+                if(arr[i][1] < arrMin){
+                    arrMin = arr[i][1];
+                    minIndex = i;
+                }
+            }
+            if(arrMax-arrMin > 15* Math.sqrt(n)) 
+                return null;
+            else 
+                return [arr.length/(arrMax-arrMin),arrMin,arrMax,minIndex,maxIndex];
         };
 
         function calPopular(n, time, code, name) {
@@ -1628,8 +1757,55 @@ angular.module('starter.controllers', ['ngTable'])
                         }
                     }
 
+                    var maxStable = [0,0,0,0,0];
+                    var arrClone = arr[2].slice();
+
+                    for(var i = 0; i < arr[2].length-30; i++){
+                        var stable = calStable(arrClone);
+                        if(stable!=null && stable[0] > maxStable[0] ){
+                            maxStable = stable;
+                        }
+                        arrClone.shift();
+                    };
+
                     maxValue += 1;
                     minValue -= 1;
+
+                    var plotLines = [{
+                            value: minP,
+                            color: 'green',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'min ' + (maxP - minP).toFixed(1)
+                            }
+                        }, {
+                            value: maxP,
+                            color: 'green',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'max ' + (maxP - minP).toFixed(1)
+                            }
+                        }, {
+                            value: maxStable[1],
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'stable ' + (maxStable[2] - maxStable[1]).toFixed(1),
+                                align: 'right'
+                            }
+                        }, {
+                            value: maxStable[2],
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 2,
+                            label: {
+                                text: 'stable ' + (maxStable[2] - maxStable[1]).toFixed(1),
+                                align: 'right'
+                            }
+                        }];
 
                     var yAxis = [{
                         labels: {
@@ -1648,23 +1824,7 @@ angular.module('starter.controllers', ['ngTable'])
                         max: maxValue,
                         min: minValue,
                         opposite: true,
-                        plotLines: [{
-                            value: minP,
-                            color: 'green',
-                            dashStyle: 'shortdash',
-                            width: 2,
-                            label: {
-                                text: 'min'
-                            }
-                        }, {
-                            value: maxP,
-                            color: 'red',
-                            dashStyle: 'shortdash',
-                            width: 2,
-                            label: {
-                                text: 'max'
-                            }
-                        }]
+                        plotLines: plotLines
                     }];
 
                     for(var i in arr){
