@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
-    "ng-table": "^4.0.0"
+    "ng-table": "^4.0.0",
+    "angular-ui-notification": "^0.3.6"
   }
 }

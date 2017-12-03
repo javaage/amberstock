@@ -9,7 +9,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.socketUrl = '';
 
-        var socket;
+        $scope.socket = null;
         if($scope.player)
             $scope.player.pause();
 
@@ -22,7 +22,7 @@ angular.module('starter.controllers', ['ngTable'])
 
           var alarmTime = new Date();
           alarmTime.setSeconds(alarmTime.getSeconds() + 1);
-          $cordovaLocalNotification.add({
+          $cordovaLocalNotification.schedule({
             id: "1234",
             date: alarmTime,
             message: message,
@@ -30,22 +30,24 @@ angular.module('starter.controllers', ['ngTable'])
             autoCancel: true,
             sound: "file://system/media/audio/notifications/Default.ogg"
           }).then(function () {
-            alert("The notification has been set");
+            //alert("The notification has been set");
             console.log("The notification has been set");
           });
         };
 
         $scope.isScheduled = function() {
           $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
-            alert("Notification 1234 Scheduled: " + isScheduled);
+            //alert("Notification 1234 Scheduled: " + isScheduled);
           });
         };
 
         $scope.initWebSocket = function(){
           if (window.WebSocket) {
-            if (socket == null || socket.readyState !== 1) {
-                socket = new WebSocket($scope.socketUrl);
-                socket.onmessage = function(event) { 
+            if ($scope.socket == null || $scope.socket.readyState > 1) {
+                
+                //$scope.socket = new sae.Channel($scope.socketUrl);
+                $scope.socket = new WebSocket($scope.socketUrl);
+                $scope.socket.onmessage = function(event) { 
                   console.log(event.data);
 
                   var title = '';
@@ -53,36 +55,40 @@ angular.module('starter.controllers', ['ngTable'])
 
                   var body = eval('(' + event.data + ')');
 
-                  if(body.title){
+                  
+
+                  if(body.type == 'update'){
+                    $scope.$broadcast("update");
+                  } else if(body.title && body.message){
                     title = body.title;
-                  }
-
-                  if(body.message){
                     message = body.message;
+                    $scope.notify(title,message);
                   }
-
-                  $scope.notify(title,message);
+                  
                 }; 
 
-                socket.onclose = function(event) { 
+                $scope.socket.onclose = function(event) { 
                   console.log(event);
                 }; 
                 
-                socket.onopen = function(event) { 
+                $scope.socket.onopen = function(event) { 
                     console.log(event);
                 }; 
-                socket.onerror =function(event){
-                  alert("web socket 出错。");
+                $scope.socket.onerror =function(event){
+                  $scope.socket.close();
+                  $scope.socket = null;
+                  console.log("web socket 出错。");
+                  $scope.initWebSocket();
                 };
             }  
           } else {
-            alert("你的浏览器不支持web socket.");
+            console.log("你的浏览器不支持web socket.");
           }
         };
 
         $scope.send = function(message) {
             $scope.initWebSocket();
-            socket.send(message);
+            $scope.socket.send(message);
         };
 
         $scope.getSocketUrl = function(){
@@ -304,7 +310,7 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
-        //$scope.getSocketUrl();
+        $scope.getSocketUrl();
 
         var locationChangeStart = function(){
             if($rootScope.loop){
@@ -334,13 +340,13 @@ angular.module('starter.controllers', ['ngTable'])
             autoCancel: true,
             sound: "file://system/media/audio/notifications/Default.ogg"
           }).then(function () {
-            alert("The notification has been set");
+            //alert("The notification has been set");
             console.log("The notification has been set");
           });
         };
         $scope.isScheduled = function() {
           $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
-            alert("Notification 1234 Scheduled: " + isScheduled);
+            //alert("Notification 1234 Scheduled: " + isScheduled);
           });
         };
 
@@ -630,7 +636,7 @@ angular.module('starter.controllers', ['ngTable'])
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
+                    //alert('delete successfully.');
             });
         };
     }).controller('AttendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
@@ -679,7 +685,7 @@ angular.module('starter.controllers', ['ngTable'])
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
+                    //alert('delete successfully.');
                 });
         };
 
@@ -737,7 +743,7 @@ angular.module('starter.controllers', ['ngTable'])
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
-                    alert('delete successfully.');
+                    //alert('delete successfully.');
                 });
         };
     })
@@ -1165,10 +1171,11 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.stopSound = function(){
             initChart();
             calPopular(n, 0, code);
-            $rootScope.loop = $interval(function (){
-                if($state.current.name=='app.popular') 
-                    calPopular(n, t, code); 
-            }, 30000);
+            $scope.initWebSocket();
+            // $rootScope.loop = $interval(function (){
+            //     if($state.current.name=='app.popular') 
+            //         calPopular(n, t, code); 
+            // }, 30000);
             if($scope.player)
                 $scope.player.pause();
             $scope.$broadcast('scroll.refreshComplete');
@@ -1541,10 +1548,14 @@ angular.module('starter.controllers', ['ngTable'])
 
         initChart();
         calPopular(n, t, code);
-        $rootScope.loop = $interval(function (){
-            if($state.current.name=='app.popular') 
-                calPopular(n, t, code); 
-        }, 30000);
+
+        $scope.$on("update", function(e, m) {
+            calPopular(n, t, code);
+        })
+        // $rootScope.loop = $interval(function (){
+        //     if($state.current.name=='app.popular') 
+        //         calPopular(n, t, code); 
+        // }, 30000);
     }).controller('CollectCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, $window, NgTableParams) {
 
         $scope.days = [1,5,20,100,500,5000];
