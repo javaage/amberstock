@@ -1,9 +1,10 @@
 <ion-view view-title="Popular{{socket.readyState}}">
   <ion-nav-buttons side="right">
-    <select ng-model="day" ng-options="x for x in days" ng-change="changeLevel(day)" style="width: 100px;margin-right: 30px;">
+    <select ng-model="day" ng-options="x for x in days" ng-change="changeLevel(day)" style="width: 100px;margin-right: 10px;">
     </select>
-    <select  ng-model="code" ng-options="x.code as (x.code + ' ' + x.name) for x in codes" ng-change="changeCode(code)" style="width: 100px;margin-right: 30px;">
+    <select  ng-model="code" ng-options="x.code as (x.code + ' ' + x.name) for x in codes" ng-change="changeCode(code)" style="width: 100px;margin-right: 10px;">
     </select>
+    <button ng-click="getSocketUrl()" style="margin-right: 10px;">Refresh</button>
   </ion-nav-buttons>
   <ion-content>
     <ion-refresher pulling-text="refresh" on-refresh="stopSound()"></ion-refresher>
