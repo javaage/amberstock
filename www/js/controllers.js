@@ -310,7 +310,7 @@ angular.module('starter.controllers', ['ngTable'])
                 });
         };
 
-        $scope.getSocketUrl();
+        //$scope.getSocketUrl();
 
         var locationChangeStart = function(){
             if($rootScope.loop){
@@ -1200,7 +1200,7 @@ angular.module('starter.controllers', ['ngTable'])
                     minIndex = i;
                 }
             }
-            if(arrMax-arrMin > 15* Math.sqrt(n)) 
+            if(arrMax-arrMin > 20* Math.sqrt(n)) 
                 return null;
             else{
                 return [arr.length/(arrMax-arrMin),arrMin.toFixed(1),arrMax.toFixed(1),minIndex,maxIndex];
@@ -1351,7 +1351,7 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxStable = [0,0,0,0,0];
                     var arrClone = arr[2].slice();
 
-                    for(var i = 0; i < arr[2].length-30; i++){
+                    for(var i = 0; i < arr[2].length-90; i++){
                         var stable = calStable(arrClone);
                         if(stable!=null && stable[0] > maxStable[0] ){
                             maxStable = stable;
@@ -1552,10 +1552,10 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.$on("update", function(e, m) {
             calPopular(n, t, code);
         })
-        // $rootScope.loop = $interval(function (){
-        //     if($state.current.name=='app.popular') 
-        //         calPopular(n, t, code); 
-        // }, 30000);
+        $rootScope.loop = $interval(function (){
+            if($state.current.name=='app.popular') 
+                calPopular(n, t, code); 
+        }, 30000);
     }).controller('CollectCtrl', function ($rootScope,$scope, $interval, $http, $ionicModal, $state, $window, NgTableParams) {
 
         $scope.days = [1,5,20,100,500,5000];
@@ -1648,7 +1648,7 @@ angular.module('starter.controllers', ['ngTable'])
                     minIndex = i;
                 }
             }
-            if(arrMax-arrMin > 15* Math.sqrt(n)) 
+            if(arrMax-arrMin > 20* Math.sqrt(n)) 
                 return null;
             else 
                 return [arr.length/(arrMax-arrMin),arrMin,arrMax,minIndex,maxIndex];
@@ -1771,7 +1771,7 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxStable = [0,0,0,0,0];
                     var arrClone = arr[2].slice();
 
-                    for(var i = 0; i < arr[2].length-30; i++){
+                    for(var i = 0; i < arr[2].length-90; i++){
                         var stable = calStable(arrClone);
                         if(stable!=null && stable[0] > maxStable[0] ){
                             maxStable = stable;
