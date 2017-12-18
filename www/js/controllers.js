@@ -298,7 +298,7 @@ angular.module('starter.controllers', ['ngTable'])
                         {
                             page: 1,            // show first page
                             count: 10,           // count per page
-                            sorting: { r: 'desc', rate: 'asc', a: 'desc' ,buy: 'desc'}
+                            sorting: { r: 'desc', rate: 'asc', a: 'desc' ,buy: 'desc', time: 'asc'}
                         },
                         {
                             total: 0, // length of data
@@ -1216,7 +1216,7 @@ angular.module('starter.controllers', ['ngTable'])
                     arrMin = 999999,
                     maxIndex = 1,
                     minIndex = 0;
-                for(var i = Math.max(0,ind-90); i < ind; i++){
+                for(var i = Math.max(0,ind-60); i < ind; i++){
                     if(arr[i][1] > arrMax){
                         arrMax = arr[i][1];
                         maxIndex = i;
@@ -1242,7 +1242,7 @@ angular.module('starter.controllers', ['ngTable'])
                 .success(function (data) {
                     console.log(data);
                     
-                    if(data.length < n)
+                    if(data.length == 0)
                         return;
 
                     var maxColumn = 0;
@@ -1665,7 +1665,7 @@ angular.module('starter.controllers', ['ngTable'])
                 .success(function (data) {
                     console.log(data);
                     
-                    if(data.length < n)
+                    if(data.length == 0)
                         return;
 
                     var maxColumn = 0;
@@ -1771,7 +1771,7 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxStable = [0,0,0,0,0];
                     var arrClone = arr[2].slice();
 
-                    for(var i = 0; i < arr[2].length-90; i++){
+                    for(var i = 0; i < arr[2].length-60; i++){
                         var stable = calStable(arrClone);
                         if(stable!=null && stable[0] > maxStable[0] ){
                             maxStable = stable;

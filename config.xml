@@ -43,4 +43,6 @@
     <allow-navigation href="http://*/*" />
     <allow-navigation href="http://192.168.0.162:8100" />
     <allow-intent href="*" />
+    <engine name="browser" spec="5.0.1" />
+    <engine name="android" spec="6.3.0" />
 </widget>
