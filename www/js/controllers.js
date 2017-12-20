@@ -1351,32 +1351,13 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxStable = [0,0,0,0,0];
                     var arrClone = arr[2].slice();
 
-                    for(var i = 0; i < arr[2].length-90; i++){
+                    for(var i = 0; i < arr[2].length-120; i++){
                         var stable = calStable(arrClone);
                         if(stable!=null && stable[0] > maxStable[0] ){
                             maxStable = stable;
                         }
                         arrClone.shift();
                     };
-
-                    if($window.localStorage[code + 'stable' + n]){
-                        var oldStable = JSON.parse($window.localStorage[code + 'stable' + n]);
-
-                        if(oldStable && (oldStable[1] != maxStable[1] || oldStable[2] != maxStable[2])){
-                            var p = {
-                                title: 'Stable is changing!',
-                                content: 'min: ' +  (maxStable[1]-oldStable[1]) + '\r\n' + 'max: ' + maxStable[2] - oldStable[2]
-                            };
-
-                            $http.get('https://ichess.sinaapp.com/ext/sendMail.php?' + $.param(p),{timeout: 20000})
-                            .success(function (data) {
-                                console.log(data);
-                            });
-                        }
-
-                        $window.localStorage[code + 'stable' + n] = JSON.stringify([arr.length/(maxStable[2]-maxStable[1]),maxStable[1],maxStable[2]]);
-                    }
-                
 
                     maxValue += 1;
                     minValue -= 1;
@@ -1771,7 +1752,7 @@ angular.module('starter.controllers', ['ngTable'])
                     var maxStable = [0,0,0,0,0];
                     var arrClone = arr[2].slice();
 
-                    for(var i = 0; i < arr[2].length-60; i++){
+                    for(var i = 0; i < arr[2].length-120; i++){
                         var stable = calStable(arrClone);
                         if(stable!=null && stable[0] > maxStable[0] ){
                             maxStable = stable;
