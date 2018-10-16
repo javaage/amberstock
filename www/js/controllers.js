@@ -92,7 +92,7 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.getSocketUrl = function(){
-            $http.get('https://ichess.sinaapp.com/ext/channel.php')//('https://ichess.sinaapp.com/ext/channel.php')
+            $http.get('http://localhost:81/ext/channel.php')//('http://localhost:81/ext/channel.php')
             .success(function (data) {
                 $scope.socketUrl = data;
                 $scope.initWebSocket();
@@ -116,7 +116,7 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.getTing = function(){
-            $http.get('https://ichess.sinaapp.com/daily/ting20.php')
+            $http.get('http://localhost:81/daily/ting20.php')
             .success(function(data){
                 $scope.ting=data;
             });
@@ -162,7 +162,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.addAttend = function(code){
 
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            var urlAdd = "http://localhost:81/attend.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url);
@@ -170,7 +170,7 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.deleteAttend = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
+            var urlDetete = "http://localhost:81/attend.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url);
@@ -190,9 +190,9 @@ angular.module('starter.controllers', ['ngTable'])
             $("#divDaily").empty();
 
             if(code=='sz399001'){
-                var url = 'https://ichess.sinaapp.com/prefindex.php?code=' + code;
+                var url = 'http://localhost:81/prefindex.php?code=' + code;
             }else{
-                var url = 'https://ichess.sinaapp.com/prefprice.php?code=' + code
+                var url = 'http://localhost:81/prefprice.php?code=' + code
             }
 
             $http.post(url)
@@ -390,7 +390,7 @@ angular.module('starter.controllers', ['ngTable'])
         }
 
         function calindex(n) {
-            $http.get('https://ichess.sinaapp.com/calindex.php?n=' + n)
+            $http.get('http://localhost:81/calindex.php?n=' + n)
                 .success(function (data) {
                     console.log(data);
                     createChart(data);
@@ -407,7 +407,7 @@ angular.module('starter.controllers', ['ngTable'])
         $scope.action[2] = 'Pre Buy';
         $scope.action[3] = 'Buy';
 
-        $scope.url = "https://ichess.sinaapp.com/actionList.php";
+        $scope.url = "http://localhost:81/actionList.php";
         $scope.getCounter($scope.url,$scope);
     })
     .controller('ShortCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $location) {
@@ -415,16 +415,16 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.q = {};
         $scope.loadShort = function(id){
-            $scope.url = "https://ichess.sinaapp.com/actionDetail.php?id=" + id;
+            $scope.url = "http://localhost:81/actionDetail.php?id=" + id;
             $scope.getCounter($scope.url,$scope);
         };
 
         $scope.changeTime = function(id){
-            $scope.url = "https://ichess.sinaapp.com/actionDetail.php?id=" + id;
+            $scope.url = "http://localhost:81/actionDetail.php?id=" + id;
             $scope.getCounter($scope.url,$scope);
         };
 
-        var urlTime = "https://ichess.sinaapp.com/actionDetail.php?t=1";
+        var urlTime = "http://localhost:81/actionDetail.php?t=1";
         $http.get(urlTime)
             .success(function(data){
                 if(data.length>0){
@@ -454,7 +454,7 @@ angular.module('starter.controllers', ['ngTable'])
                 $scope.searchStocks=[];
                 return;
             }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            var urlSearch = "http://localhost:81/searchStock.php?q=" + q;
             $http.get(urlSearch)
                 .success(function (data) {
                     $scope.searchStocks = data;
@@ -476,7 +476,7 @@ angular.module('starter.controllers', ['ngTable'])
                 opt: $scope.q.opt,
                 value: $scope.q.value
             };
-             var urlAdd = "https://ichess.sinaapp.com/inspect.php?" + $.param(data);
+             var urlAdd = "http://localhost:81/inspect.php?" + $.param(data);
              $http.get(urlAdd)
                 .success(function (data) {
                     $scope.loadInspect();
@@ -489,7 +489,7 @@ angular.module('starter.controllers', ['ngTable'])
                 a: "d",
                 id: id
             };
-            var urlDelete = "https://ichess.sinaapp.com/inspect.php?" + $.param(data);
+            var urlDelete = "http://localhost:81/inspect.php?" + $.param(data);
             $http.get(urlDelete)
                 .success(function (data) {
                     $scope.loadInspect();
@@ -498,32 +498,32 @@ angular.module('starter.controllers', ['ngTable'])
         };
 
         $scope.loadInspect = function(){
-            $scope.url = "https://ichess.sinaapp.com/inspect.php";
+            $scope.url = "http://localhost:81/inspect.php";
             $scope.getCounter($scope.url,$scope);
         };
 
         $scope.loadInspect();
     }).controller('DailyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
-        $scope.url = "https://ichess.sinaapp.com/daily/analysis.php";
+        $scope.url = "http://localhost:81/daily/analysis.php";
         $scope.getCounter($scope.url,$scope);
     }).controller('WaveCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
 
-        $scope.url = "https://ichess.sinaapp.com/rate.php";
+        $scope.url = "http://localhost:81/rate.php";
         $scope.getCounter($scope.url,$scope);
 
     }).controller('AscendCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
 
-        $scope.url = "https://ichess.sinaapp.com/daily/ascend.php";
+        $scope.url = "http://localhost:81/daily/ascend.php";
         $scope.getCounter($scope.url,$scope);
 
     }).controller('SignalCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
 
-        $scope.url = "https://ichess.sinaapp.com/pref.php";
+        $scope.url = "http://localhost:81/pref.php";
         $scope.getCounter($scope.url,$scope);
 
     }).controller('TabCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.q = {};
-        var urlTime = "https://ichess.sinaapp.com/gethistory.php";
+        var urlTime = "http://localhost:81/gethistory.php";
         $http.get(urlTime)
             .success(function(data){
                 if(data.length>0){
@@ -535,33 +535,33 @@ angular.module('starter.controllers', ['ngTable'])
         });
 
         $scope.changeTab = function(trans){
-            $scope.url = "https://ichess.sinaapp.com/" + trans + ".php";
+            $scope.url = "http://localhost:81/" + trans + ".php";
             $scope.getCounter($scope.url,$scope);
         };
 
     }).controller('RateCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
         $scope.changeTime = function(t){
-            $scope.url = "https://ichess.sinaapp.com/rate.php?t=" + t;
+            $scope.url = "http://localhost:81/rate.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
         //$scope.changeTime('');
     }).controller('TransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         
         $scope.changeTime = function(t){
-            $scope.url = "https://ichess.sinaapp.com/trans.php?t=" + t;
+            $scope.url = "http://localhost:81/trans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
         //$scope.changeTime('');
     }).controller('BktransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.changeTime = function(t){
-            $scope.url = "https://ichess.sinaapp.com/bktrans.php?t=" + t;
+            $scope.url = "http://localhost:81/bktrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
         //$scope.changeTime('');
     }).controller('CtransCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.changeTime = function(t){
-            $scope.url = "https://ichess.sinaapp.com/ctrans.php?t=" + t;
+            $scope.url = "http://localhost:81/ctrans.php?t=" + t;
             $scope.getCounter($scope.url,$scope);
         };
     }).controller('MyCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams, $interval, $state) {
@@ -603,7 +603,7 @@ angular.module('starter.controllers', ['ngTable'])
 
     }).controller('HolderCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
-        $scope.url = "https://ichess.sinaapp.com/holder.php";
+        $scope.url = "http://localhost:81/holder.php";
         $scope.getCounter($scope.url,$scope);
         
         $scope.searchStock = function(q){
@@ -611,7 +611,7 @@ angular.module('starter.controllers', ['ngTable'])
                 $scope.searchStocks=[];
                 return;
             }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            var urlSearch = "http://localhost:81/searchStock.php?q=" + q;
             $http.get(urlSearch)
                 .success(function (data) {
                     $scope.searchStocks = data;
@@ -625,14 +625,14 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.addHolder = function(code){
 
-            var urlAdd = "https://ichess.sinaapp.com/holder.php?a=a&c=" + code;
+            var urlAdd = "http://localhost:81/holder.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteHolder = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + code;
+            var urlDetete = "http://localhost:81/holder.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
@@ -643,7 +643,7 @@ angular.module('starter.controllers', ['ngTable'])
         
         $scope.search = {};
 
-        $scope.url = "https://ichess.sinaapp.com/attend.php";
+        $scope.url = "http://localhost:81/attend.php";
         $scope.getCounter($scope.url,$scope);
         
         $scope.searchStock = function(q){
@@ -651,7 +651,7 @@ angular.module('starter.controllers', ['ngTable'])
                 $scope.searchStocks=[];
                 return;
             }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            var urlSearch = "http://localhost:81/searchStock.php?q=" + q;
             $http.get(urlSearch)
                 .success(function (data) {
                     $scope.searchStocks = data;
@@ -665,7 +665,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.addAttend = function(code){
 
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=a&c=" + code;
+            var urlAdd = "http://localhost:81/attend.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
@@ -674,14 +674,14 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.deleteAll = function(){
 
-            var urlAdd = "https://ichess.sinaapp.com/attend.php?a=d";
+            var urlAdd = "http://localhost:81/attend.php?a=d";
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteAttend = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + code;
+            var urlDetete = "http://localhost:81/attend.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
@@ -701,7 +701,7 @@ angular.module('starter.controllers', ['ngTable'])
     }).controller('WeakCtrl', function ($rootScope,$scope, $http, $ionicModal, NgTableParams) {
         $scope.search = {};
 
-        $scope.url = "https://ichess.sinaapp.com/weak.php";
+        $scope.url = "http://localhost:81/weak.php";
         $scope.getCounter($scope.url,$scope);
         
         $scope.searchStock = function(q){
@@ -709,7 +709,7 @@ angular.module('starter.controllers', ['ngTable'])
                 $scope.searchStocks=[];
                 return;
             }
-            var urlSearch = "https://ichess.sinaapp.com/searchStock.php?q=" + q;
+            var urlSearch = "http://localhost:81/searchStock.php?q=" + q;
             $http.get(urlSearch)
                 .success(function (data) {
                     $scope.searchStocks = data;
@@ -723,7 +723,7 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.addWeak = function(code){
 
-            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=a&c=" + code;
+            var urlAdd = "http://localhost:81/weak.php?a=a&c=" + code;
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
@@ -732,14 +732,14 @@ angular.module('starter.controllers', ['ngTable'])
 
         $scope.deleteAll = function(){
 
-            var urlAdd = "https://ichess.sinaapp.com/weak.php?a=d";
+            var urlAdd = "http://localhost:81/weak.php?a=d";
             $http.get(urlAdd)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
                 });
         };
         $scope.deleteAttend = function(code){
-            var urlDetete = "https://ichess.sinaapp.com/weak.php?a=d&c=" + code;
+            var urlDetete = "http://localhost:81/weak.php?a=d&c=" + code;
             $http.get(urlDetete)
                 .success(function (data) {
                     $scope.getCounter($scope.url,$scope);
@@ -866,7 +866,7 @@ angular.module('starter.controllers', ['ngTable'])
                                 series: {
                                     events: {
                                         legendItemClick: function(event) {
-                                            var urlDetete = "https://ichess.sinaapp.com/holder.php?a=d&c=" + event.target.name;
+                                            var urlDetete = "http://localhost:81/holder.php?a=d&c=" + event.target.name;
                                             $http.get(urlDetete)
                                                 .success(function (data) {
                                                     $('div#' + event.target.name).remove();
@@ -892,7 +892,7 @@ angular.module('starter.controllers', ['ngTable'])
                 };
 
                 $scope.getindex = function (code,name) {
-                    $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
+                    $http.get('http://localhost:81/getindex.php?codes=' + code )
                         .success(function (data) {
                             console.log(data);
 
@@ -904,7 +904,7 @@ angular.module('starter.controllers', ['ngTable'])
                     });
                 };
                 var getHolder = function () {
-                    var url = 'https://ichess.sinaapp.com/holder.php';
+                    var url = 'http://localhost:81/holder.php';
                     $http.get(url)
                         .success(function (data) {
                             for (var i in data) {
@@ -993,7 +993,7 @@ angular.module('starter.controllers', ['ngTable'])
                                 series: {
                                     events: {
                                         legendItemClick: function(event) {
-                                            var urlDetete = "https://ichess.sinaapp.com/attend.php?a=d&c=" + event.target.name;
+                                            var urlDetete = "http://localhost:81/attend.php?a=d&c=" + event.target.name;
                                             $http.get(urlDetete)
                                                 .success(function (data) {
                                                     $('div#' + event.target.name).remove();
@@ -1019,7 +1019,7 @@ angular.module('starter.controllers', ['ngTable'])
                 };
 
                 $scope.getindex = function (code,name) {
-                    $http.get('https://ichess.sinaapp.com/getindex.php?codes=' + code )
+                    $http.get('http://localhost:81/getindex.php?codes=' + code )
                         .success(function (data) {
                             console.log(data);
                             if(data[0]){
@@ -1033,7 +1033,7 @@ angular.module('starter.controllers', ['ngTable'])
                     });
                 };
                 var getAttend = function () {
-                    // var url = 'https://ichess.sinaapp.com/attend.php';
+                    // var url = 'http://localhost:81/attend.php';
                     // $http.get(url)
                     //     .success(function (data) {
                     //         for (var i in data) {
@@ -1238,7 +1238,7 @@ angular.module('starter.controllers', ['ngTable'])
                     code: code
                 };
 
-            $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p),{timeout: 20000})
+            $http.get('http://localhost:81/other/cy.php?' + $.param(p),{timeout: 20000})
                 .success(function (data) {
                     console.log(data);
                     
@@ -1642,7 +1642,7 @@ angular.module('starter.controllers', ['ngTable'])
                     code: code
                 };
 
-            $http.get('https://ichess.sinaapp.com/other/cy.php?' + $.param(p),{timeout: 20000})
+            $http.get('http://localhost:81/other/cy.php?' + $.param(p),{timeout: 20000})
                 .success(function (data) {
                     console.log(data);
                     

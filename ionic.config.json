@@ -1,6 +1,5 @@
 {
   "name": "IonicProject",
-  "app_id": "",
   "integrations": {
     "cordova": {}
   },
