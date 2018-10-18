@@ -1,0 +1,21 @@
+<div>
+  <ion-tabs class="tabs-icon-top tabs-color-active-positive">
+    <ion-tab title="Daily" icon-off="ion-ios-mic" icon-on="ion-ios-mic-outline" href="#/app/other/daily" on-select="changeTab('daily')">
+      <ion-nav-view name="daily"></ion-nav-view>
+    </ion-tab>
+
+    <!-- Dashboard Tab -->
+    <ion-tab title="Signal" icon-off="ion-ios-monitor-outline" icon-on="ion-ios-monitor" href="#/app/other/signal" on-select="changeTab('signal')">
+      <ion-nav-view name="signal"></ion-nav-view>
+    </ion-tab>
+
+    <!-- Chats Tab -->
+    <ion-tab title="wave" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/app/other/wave" on-select="changeTab('wave')"">
+      <ion-nav-view name="wave"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="ascend" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/app/other/ascend" on-select="changeTab('ascend')"">
+      <ion-nav-view name="ascend"></ion-nav-view>
+    </ion-tab>
+  </ion-tabs>
+</div>

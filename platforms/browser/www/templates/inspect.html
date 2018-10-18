@@ -1,0 +1,47 @@
+<ion-view view-title="inspect">
+    
+    <ion-content>
+        <ion-refresher pulling-text="refresh" on-refresh="loadInspect()"></ion-refresher>
+        <div>
+        <input type="text" name="sc" ng-model="q.stock.code" ng-change="searchStock(q.stock.code)" placeholder="please input your code here" style="width:100%;border: 1px;">
+        <ion-list>
+          <ion-item ng-repeat="item in searchStocks"  ng-click="selectCode(item)">
+             {{item.code}} {{item.name}}
+          </ion-item>
+        </ion-list>
+        <span style="width:100px;">type:</span><select ng-model="q.type" ng-init="q.type=types[0]" ng-options="item as item for item in types"  style="width:100px;">
+        </select>
+        <br>
+        <span style="width:100px;">&nbsp;opt:</span><select ng-model="q.opt" ng-init="q.opt=opts[0]" ng-options="item as item for item in opts"  style="width:100px;">
+        </select>
+        <br>
+        <span>value:</span><input type="text" name="value" ng-model="q.value" placeholder="Please input your value here." style="display: inline;">
+        <br>
+        <button ng-click="addInspect(q)">add inspect</button>
+        
+        </div>
+
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+            <tr ng-repeat="stock in $data">
+                <td title="'代码'" sortable="'code'" ng-click="openModal('{{stock.code}}')">
+                    {{stock.code}}<span class="badge label-danger">{{ting[stock.code.toLowerCase()]}}</span></td>
+                <td title="'名称'" sortable="'name'">
+                    {{stock.name}}</td>
+                <td title="'type'" sortable="'type'">
+                    {{stock.type}}</td>
+                <td title="'opt'" sortable="'opt'">
+                    {{stock.opt}}</td>
+                <td title="'value'" sortable="'value'">
+                    {{stock.value}}</td>
+                <td title="'date'" sortable="'create_date'">
+                    {{stock.create_date}}</td>
+                <td title="'flag'" sortable="'flag'">
+                    {{stock.flag}}</td>
+                <td title="'操作'">
+                    <button type="button" class="btn btn-primary" ng-click="deleteInspect('{{stock.id}}')">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </ion-content>
+
+</ion-view>

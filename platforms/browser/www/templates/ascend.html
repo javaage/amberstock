@@ -1,0 +1,22 @@
+<ion-view view-title="Ascend">
+    <ion-content>
+        <ion-refresher pulling-text="refresh" on-refresh="getCounter(url)"></ion-refresher>
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+            <tr ng-repeat="stock in $data">
+                <td title="'代码'" sortable="'code'" ng-click="openModal('{{stock.code}}')">
+                    {{stock.code}}<span class="badge label-danger">{{ting[stock.code.toLowerCase()]}}</span></td>
+                <td title="'名称'" sortable="'name'">
+                    {{stock.name}}</td>
+                <td title="'rate'" sortable="'rate'">
+                    {{stock.rate | number:3}}</td>
+                <td title="'gate'" sortable="'gate'">
+                    {{stock.gate | number:3}}</td>
+                <td title="'current'" sortable="'current'">
+                    {{stock.current}}</td>
+                <td title="'Attend'">
+                    <button ng-click="addAttend(stock.code)">Add</button>
+                </td>
+            </tr>
+        </table>
+    </ion-content>
+</ion-view>

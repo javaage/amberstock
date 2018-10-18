@@ -1,0 +1,24 @@
+<ion-view view-title="Buy Signal">
+    <ion-content>
+        <ion-refresher pulling-text="refresh" on-refresh="getCounter(url)"></ion-refresher>
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+            <tr ng-repeat="stock in $data">
+                <td title="'代码'" sortable="'code'" ng-click="openModal('{{stock.code}}')">
+                    {{stock.code}}<span class="badge label-danger">{{ting[stock.code.toLowerCase()]}}</span></td>
+                <td title="'名称'" sortable="'name'">
+                    {{stock.name}}</td>
+                <td title="'sell'" sortable="'sell'">
+                    {{stock.sell}}</td>
+                <td title="'buy'" sortable="'buy'">
+                    {{stock.buy}}</td>
+                <td title="'gate'" sortable="'gate'">
+                    {{stock.gate}}</td>
+                <td title="'concept'" sortable="'concept'">
+                    {{stock.concept}}</td>
+                <td title="'Attend'">
+                    <button ng-click="addAttend(stock.code)">Add</button>
+                </td>
+            </tr>
+        </table>
+    </ion-content>
+</ion-view>
